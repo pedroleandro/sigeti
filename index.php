@@ -11,7 +11,14 @@ try {
 
     $pdo = Connection::getInstance();
 
-    echo "<h1>Conexão com o banco realizada com sucesso.</h1>";
+    $query = "select peoples.id, peoples.name, users.email from users inner join peoples on users.people_id = peoples.id order by peoples.id;";
+
+    $statement = Connection::getInstance()->prepare($query);
+    $statement->execute();
+
+    $users = $statement->fetchAll();
+
+    require __DIR__ . '/./app/Views/SigetiWeb/Users.php';
 
 } catch (\Throwable $exception) {
 

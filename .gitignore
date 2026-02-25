@@ -4,3 +4,4 @@ vendor/
 storage/
 composer.lock
 .env
+startbootstrap/
