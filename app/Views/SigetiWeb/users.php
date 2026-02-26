@@ -15,11 +15,13 @@
     <ul>
         <?php foreach ($users as $user) : ?>
             <li style="list-style-type:none">
-                <strong>ID:</strong> <?= $user->id; ?>
+                <strong>ID:</strong> <?= $user->getPeopleId(); ?>
                 <br>
-                <strong>Nome: </strong> <?= $user->name; ?>
+                <strong>Nome: </strong> <?= $user->people()->getName(); ?>
                 <br>
-                <strong>Email:</strong> <?= $user->email; ?>
+                <strong>Document: </strong> <?= $user->people()->getDocument(); ?>
+                <br>
+                <strong>Email:</strong> <?= $user->getEmail(); ?>
             </li>
             <hr>
         <?php endforeach; ?>

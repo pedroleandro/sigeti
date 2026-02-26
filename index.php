@@ -3,17 +3,16 @@
 require_once './vendor/autoload.php';
 
 use App\Models\People;
+use App\Models\User;
 use Dotenv\Dotenv;
 
 try {
     $dotenv = Dotenv::createImmutable(__DIR__ . '/');
     $dotenv->load();
 
-    $newPeople = (new People())::find(15);
-    var_dump($newPeople);
+    $users = User::all();
 
-
-    require __DIR__ . '/./app/Views/SigetiWeb/Users.php';
+    require __DIR__ . '/./app/Views/SigetiWeb/users.php';
 
 } catch (\Throwable $exception) {
 

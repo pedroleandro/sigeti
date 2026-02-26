@@ -55,24 +55,31 @@ class People extends AbstractModel
             : null;
     }
 
-    public function validate(): void
-    {
-        foreach ($this->required as $field) {
-            if (!isset($this->attributes[$field]) || trim($this->attributes[$field]) === '') {
-                throw new InvalidArgumentException("O campo {$field} é obrigatório.");
-            }
-        }
-    }
-
     public function setName(string $name): self
     {
-        $this->attributes['name'] = trim($name);
+        $name = trim($name);
+
+        if ($name === '') {
+            throw new InvalidArgumentException('O campo nome é obrigatório.');
+        }
+
+        $name = filter_var($name, FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $this->attributes['name'] = $name;
+
         return $this;
     }
 
     public function setDocument(string $document): self
     {
-        $this->attributes['document'] = preg_replace('/\D/', '', $document);
+        $document = preg_replace('/\D/', '', $document);
+
+        if ($document === '') {
+            throw new \InvalidArgumentException('O campo documento é obrigatório.');
+        }
+
+        $this->attributes['document'] = $document;
+
         return $this;
     }
 

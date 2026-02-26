@@ -43,7 +43,12 @@ abstract class AbstractModel
     {
         foreach ($this->fillable as $field) {
             if (array_key_exists($field, $data)) {
-                $this->attributes[$field] = $data[$field];
+                $setter = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $field)));
+                if (method_exists($this, $setter)) {
+                    $this->$setter($data[$field]);
+                } else {
+                    $this->attributes[$field] = $data[$field];
+                }
             }
         }
 
@@ -52,13 +57,7 @@ abstract class AbstractModel
 
     public function save(): bool
     {
-        if (method_exists($this, 'validate')) {
-            $this->validate();
-        }
-
-        return isset($this->attributes[$this->primaryKey])
-            ? $this->performUpdate()
-            : $this->performInsert();
+        return $this->exists ? $this->performUpdate() : $this->performInsert();
     }
 
     public function performInsert(): bool
