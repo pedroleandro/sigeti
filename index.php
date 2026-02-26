@@ -10,7 +10,10 @@ try {
     $dotenv = Dotenv::createImmutable(__DIR__ . '/');
     $dotenv->load();
 
-    $users = User::all();
+    $users = (new User())
+        ->where("people_id", ">", 4)
+        ->orderBy("created_at", "DESC")
+        ->get();
 
     require __DIR__ . '/./app/Views/SigetiWeb/users.php';
 

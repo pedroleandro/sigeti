@@ -14,8 +14,6 @@ abstract class AbstractModel
     protected string $primaryKey = 'id';
     protected array $fillable = [];
 
-    protected array $required = [];
-
     protected bool $timestamps = true;
 
     protected array $attributes = [];
@@ -270,7 +268,14 @@ abstract class AbstractModel
         $statement = $this->connection->prepare($sql);
         $statement->execute($this->params);
 
-        return $statement->fetchAll();
+        $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        $models = [];
+        foreach ($rows as $row) {
+            $models[] = static::hydrate($row);
+        }
+
+        return $models;
     }
 
     public function getAttributes(): array

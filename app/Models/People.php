@@ -15,10 +15,6 @@ class People extends AbstractModel
         'document'
     ];
 
-    protected array $required = [
-        'name'
-    ];
-
     public function getId(): ?int
     {
         return $this->attributes['id'] ?? null;
