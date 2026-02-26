@@ -2,21 +2,16 @@
 
 require_once './vendor/autoload.php';
 
+use App\Models\People;
 use Dotenv\Dotenv;
-use App\Core\Connection;
 
 try {
     $dotenv = Dotenv::createImmutable(__DIR__ . '/');
     $dotenv->load();
 
-    $pdo = Connection::getInstance();
+    $newPeople = (new People())::find(15);
+    var_dump($newPeople);
 
-    $query = "select peoples.id, peoples.name, users.email from users inner join peoples on users.people_id = peoples.id order by peoples.id;";
-
-    $statement = Connection::getInstance()->prepare($query);
-    $statement->execute();
-
-    $users = $statement->fetchAll();
 
     require __DIR__ . '/./app/Views/SigetiWeb/Users.php';
 
