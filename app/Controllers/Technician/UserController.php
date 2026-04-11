@@ -129,7 +129,7 @@ class UserController extends Controller
     {
         $userId = $data['id'];
 
-//        $this->validateCsrfToken($data, "/tecnico/usuarios/editar/" . $userId);
+        $this->validateCsrfToken($data, "/tecnico/usuarios/editar/" . $userId);
 
         $user = User::find((int) $userId);
 
@@ -137,10 +137,13 @@ class UserController extends Controller
             $user->fill([
                 "name" => $data["name"],
                 "email" => $data["email"],
-                "document"=> $data["document"] ?? null,
                 "role" => $data["role"],
                 "status" => $data["status"]
             ]);
+
+            if(!empty($data['document'])){
+                $user->setDocument($data['document']);
+            }
 
             if(!empty($data['password'])){
                 $user->setPassword($data['password']);
