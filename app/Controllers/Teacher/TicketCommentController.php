@@ -20,7 +20,7 @@ class TicketCommentController extends Controller
 
     public function index(?array $data): void
     {
-        $ticket = Ticket::find((int)($data["id"] ?? 0));
+        $ticket = Ticket::find((int)($data["ticket_id"] ?? 0));
 
         if (!$ticket) {
             Message::warning("Chamado não encontrado ou não existe.");
@@ -46,7 +46,7 @@ class TicketCommentController extends Controller
 
     public function store(?array $data): void
     {
-        $ticketId = (int)($data["id"] ?? 0);
+        $ticketId = (int)($data["ticket_id"] ?? 0);
 
         $this->validateCsrfToken($data, "/professor/chamados/{$ticketId}/comentarios");
 

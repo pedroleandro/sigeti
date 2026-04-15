@@ -20,7 +20,7 @@ class TicketCommentController extends Controller
 
     public function index(?array $data): void
     {
-        $ticket = Ticket::find($data["id"]);
+        $ticket = Ticket::find($data["ticket_id"]);
 
         if (!$ticket) {
             Message::warning("Chamado não encontrado ou não existe.");
@@ -28,7 +28,7 @@ class TicketCommentController extends Controller
             return;
         }
 
-        $comments = TicketComment::commentsByTicketId($data["id"]);
+        $comments = TicketComment::commentsByTicketId($data["ticket_id"]);
 
         echo $this->view->render("technician/ticket/comments", [
             "ticket" => $ticket,
@@ -40,7 +40,7 @@ class TicketCommentController extends Controller
 
     public function store(?array $data): void
     {
-        $ticketId = (int)($data["id"] ?? 0);
+        $ticketId = (int)($data["ticket_id"] ?? 0);
 
         $this->validateCsrfToken($data, "/tecnico/chamados/{$ticketId}/comentarios");
 
@@ -80,8 +80,8 @@ class TicketCommentController extends Controller
         try {
             $comment->fill($payload);
             $comment->save();
-        } catch (\InvalidArgumentException $e) {
-            Message::error($e->getMessage());
+        } catch (\InvalidArgumentException $invalidArgumentException) {
+            Message::error($invalidArgumentException->getMessage());
             redirect("/tecnico/chamados/{$ticketId}/comentarios");
             return;
         }
@@ -92,7 +92,7 @@ class TicketCommentController extends Controller
 
     public function destroy(?array $data): void
     {
-        $ticketId = (int)($data["ticket"] ?? 0);
+        $ticketId = (int)($data["ticket_id"] ?? 0);
         $commentId = (int)($data["id"] ?? 0);
 
         $this->validateCsrfToken($data, "/tecnico/chamados/{$ticketId}/comentarios/excluir/{$commentId}");
