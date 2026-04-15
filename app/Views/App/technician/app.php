@@ -265,6 +265,7 @@
 <script src="<?= assets_mazer('/assets/extensions/apexcharts/apexcharts.min.js') ?>"></script>
 
 <script src="<?= assets('/js/charts/chart-tickets-month.js') ?>"></script>
+<script src="<?= assets('/js/charts/chart-tickets-category.js') ?>"></script>
 <script src="<?= assets('/js/charts/chart-resolution-rate.js') ?>"></script>
 <script src="<?= assets('/js/charts/chart-avg-resolution.js') ?>"></script>
 <script src="<?= assets('/js/charts/chart-tickets-priority.js') ?>"></script>

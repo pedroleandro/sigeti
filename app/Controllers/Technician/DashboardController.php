@@ -23,6 +23,7 @@ class DashboardController extends Controller
         $tickets = $ticketModel->allOrdered();
         $quantityTicketsByStatus = $ticketModel->countByStatusCurrentYear();
         $quantityTicketsByMonth = $ticketModel->countByMonthCurrentYear();
+        $quantityTicketsByCategory = (new Ticket())->countByCategoryCurrentYear();
         $resolutionRate = $ticketModel->resolutionRateCurrentYear();
         $avgResolutionDays = $ticketModel->avgResolutionDaysByMonthCurrentYear();
         $ticketsByPriorityAndStatus = $ticketModel->countByPriorityAndStatusCurrentYear();
@@ -31,6 +32,7 @@ class DashboardController extends Controller
             "tickets" => $tickets,
             "quantityTicketsByStatus" => $quantityTicketsByStatus,
             "quantityTicketsByMonth" => $quantityTicketsByMonth,
+            "quantityTicketsByCategory" => $quantityTicketsByCategory,
             "resolutionRate" => $resolutionRate,
             "avgResolutionDays" => $avgResolutionDays,
             "ticketsByPriorityAndStatus" => $ticketsByPriorityAndStatus,

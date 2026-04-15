@@ -134,13 +134,23 @@
                             </div>
                         </div>
                     </div>
+                    <!--                    <div class="col-lg-4">-->
+                    <!--                        <div class="card">-->
+                    <!--                            <div class="card-header">-->
+                    <!--                                <h4>Taxa de <strong>Resolução</strong></h4>-->
+                    <!--                            </div>-->
+                    <!--                            <div class="card-body">-->
+                    <!--                                <div id="chart-resolution-rate"></div>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
                     <div class="col-lg-4">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Taxa de <strong>Resolução</strong></h4>
+                                <h4>Chamados por <strong>Categoria</strong></h4>
                             </div>
                             <div class="card-body">
-                                <div id="chart-resolution-rate"></div>
+                                <div id="chart-tickets-category"></div>
                             </div>
                         </div>
                     </div>
@@ -311,8 +321,9 @@
     <script>
         window.dashboardData = {
             quantityTicketsByMonth: <?= json_encode($quantityTicketsByMonth) ?>,
+            quantityTicketsByCategory: <?= json_encode($quantityTicketsByCategory) ?>,
             resolutionRate: <?= json_encode($resolutionRate) ?>,
-            avgResolutionDays:      <?= json_encode($avgResolutionDays) ?>,
+            avgResolutionDays: <?= json_encode($avgResolutionDays) ?>,
             ticketsByPriorityAndStatus: <?= json_encode($ticketsByPriorityAndStatus) ?>,
         };
     </script>

@@ -403,7 +403,6 @@ class Ticket extends AbstractModel
         return $result;
     }
 
-    //Novo
     public function countByMonthCurrentYear(): array
     {
         $year = date('Y');
@@ -430,7 +429,51 @@ class Ticket extends AbstractModel
         return array_values($result);
     }
 
-    //Novo
+    public function countByCategoryCurrentYear(): array
+    {
+        $year = date('Y');
+
+        $sql = "
+        SELECT c.name AS label, COUNT(t.id) AS total
+        FROM tickets t
+        JOIN categories c ON c.id = t.category_id
+        WHERE YEAR(t.created_at) = :year
+        GROUP BY c.name
+        ORDER BY c.name
+    ";
+
+        $statement = $this->connection->prepare($sql);
+        $statement->bindParam(':year', $year, \PDO::PARAM_INT);
+        $statement->execute();
+        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        $data = [
+            'labels' => [],
+            'totals' => []
+        ];
+
+        if (!empty($result)) {
+
+            foreach ($result as $row) {
+
+                if (isset($row['label'])) {
+                    $data['labels'][] = $row['label'];
+                } else {
+                    $data['labels'][] = 'Sem nome';
+                }
+
+                if (isset($row['total'])) {
+                    $data['totals'][] = (int) $row['total'];
+                } else {
+                    $data['totals'][] = 0;
+                }
+            }
+
+        }
+
+        return $data;
+    }
+
     public function resolutionRateCurrentYear(): int
     {
         $year = date('Y');
@@ -455,7 +498,6 @@ class Ticket extends AbstractModel
         return (int) round(($row['resolved'] / $row['total']) * 100);
     }
 
-    //Novo
     public function avgResolutionDaysByMonthCurrentYear(): array
     {
         $year = date('Y');
@@ -486,7 +528,6 @@ class Ticket extends AbstractModel
         return array_values($result);
     }
 
-    //Novo
     public function countByPriorityAndStatusCurrentYear(): array
     {
         $year = date('Y');
