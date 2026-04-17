@@ -155,10 +155,13 @@ class TicketController extends Controller
         try {
 
             $ticket->fill([
-                "assigned_to" => !empty($data["assigned_to"]) ? (int)$data["assigned_to"] : null,
                 "status" => $newStatus,
                 "priority" => $data["priority"] ?? $ticket->getPriority(),
             ]);
+
+            if(!empty($data["assigned_to"])){
+                $ticket->setAssignedTo($data["assigned_to"]);
+            }
 
             if (in_array($newStatus, [Ticket::FINISHED, Ticket::ARCHIVED], true)) {
                 $ticket->setClosedAt();
