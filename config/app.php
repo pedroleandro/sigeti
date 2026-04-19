@@ -24,3 +24,5 @@ define("USERNAME_SENDGRID", $_ENV['USERNAME_SENDGRID'] ?? "apikey");
 define("PASSWORD_SENDGRID", $_ENV['PASSWORD_SENDGRID'] ?? "secret");
 
 define("APP_DEVELOPER", $_ENV['APP_DEVELOPER'] ?? "Curso Técnico em Informática Para Internet");
+
+define("TICKET_MAX_ATTACHMENTS", $_ENV['TICKET_MAX_ATTACHMENTS'] ?? 10);
