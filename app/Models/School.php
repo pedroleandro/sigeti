@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Core\AbstractModel;
-use http\Exception\InvalidArgumentException;
+use App\Models\Ticket\Ticket;
 
 class School extends AbstractModel
 {

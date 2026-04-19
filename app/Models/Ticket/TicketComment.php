@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Ticket;
 
 use App\Core\AbstractModel;
-use App\Models\Ticket;
+use App\Models\User;
 
 class TicketComment extends AbstractModel
 {
     protected string $table = 'tickets_comments';
 
     protected string $primaryKey = 'id';
+
     protected array $fillable = [
         "ticket_id",
         "user_id",

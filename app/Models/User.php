@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Core\AbstractModel;
+use App\Models\Ticket\Ticket;
 
 class User extends AbstractModel
 {

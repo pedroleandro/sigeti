@@ -4,7 +4,7 @@ namespace App\Controllers\Technician;
 
 use App\Core\Auth;
 use App\Core\Controller;
-use App\Models\Ticket;
+use App\Models\Ticket\Ticket;
 use App\Models\User;
 
 class DashboardController extends Controller

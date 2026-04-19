@@ -5,8 +5,8 @@ namespace App\Controllers\Technician;
 use App\Core\Auth;
 use App\Core\Controller;
 use App\Core\Message;
-use App\Models\Ticket;
-use App\Models\TicketComment;
+use App\Models\Ticket\Ticket;
+use App\Models\Ticket\TicketComment;
 use App\Models\User;
 
 class TicketCommentController extends Controller

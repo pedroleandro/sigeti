@@ -7,7 +7,7 @@ use App\Core\Controller;
 use App\Core\Message;
 use App\Models\Category;
 use App\Models\School;
-use App\Models\Ticket;
+use App\Models\Ticket\Ticket;
 use App\Models\User;
 
 class TicketController extends Controller

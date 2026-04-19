@@ -3,7 +3,6 @@
 namespace App\Models\Ticket;
 
 use App\Core\AbstractModel;
-use App\Models\Ticket;
 use App\Models\User;
 
 class TicketAttachment extends AbstractModel
