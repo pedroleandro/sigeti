@@ -5,26 +5,23 @@ namespace App\Controllers\Teacher;
 use App\Core\Auth;
 use App\Core\Controller;
 use App\Core\Message;
+use App\Core\Permission;
 use App\Models\Category;
 use App\Models\School;
 use App\Models\SchoolUser;
 use App\Models\Ticket\Ticket;
-use App\Models\User;
 
 class TicketController extends Controller
 {
     public function __construct()
     {
         parent::__construct("App");
-
-        Auth::requireRole(User::TEACHER);
+        Auth::requirePermission(Permission::OPEN_TICKET);
     }
 
     public function index(): void
     {
-        $ticketModel = new Ticket();
-
-        $tickets = $ticketModel->allOrderedByUser(Auth::user()->id);
+        $tickets = (new Ticket())->allOrderedByUser(Auth::user()->id);
 
         echo $this->view->render("teacher/ticket/index", [
             "tickets" => $tickets
@@ -36,8 +33,7 @@ class TicketController extends Controller
     public function create(): void
     {
         $categories = Category::all();
-        $schoolsUser = User::find(Auth::user()->id)->schoolUserLinks();
-
+        $schoolsUser = \App\Models\User::find(Auth::user()->id)->schoolUserLinks();
         $schools = [];
 
         /** @var SchoolUser $schoolUser */
@@ -57,7 +53,7 @@ class TicketController extends Controller
     {
         $this->validateCsrfToken($data, "/professor/chamados/cadastrar");
 
-        $loggedUser = User::find(Auth::user()->id);
+        $loggedUser = \App\Models\User::find(Auth::user()->id);
         $userSchools = $loggedUser->schoolUserLinks();
 
         if (empty($userSchools)) {
@@ -67,40 +63,34 @@ class TicketController extends Controller
         }
 
         if (count($userSchools) === 1) {
-
             $schoolId = $userSchools[0]->getSchoolId();
-
         } else {
-
-            if (!$data["school_id"]) {
+            if (empty($data["school_id"])) {
                 Message::warning("Selecione a escola para o chamado.");
                 redirect("/professor/chamados/cadastrar");
                 return;
             }
 
-            $schoolIds = [];
+            $schoolIds = array_map(
+                fn(SchoolUser $link) => $link->getSchoolId(),
+                $userSchools
+            );
 
-            /** @var SchoolUser $link */
-            foreach ($userSchools as $link) {
-                $schoolIds[] = $link->getSchoolId();
-            }
-
-            if (!in_array($data['school_id'], $schoolIds, true)) {
+            if (!in_array((int)$data["school_id"], $schoolIds, true)) {
                 Message::warning("A escola selecionada não pertence ao seu vínculo.");
                 redirect("/professor/chamados/cadastrar");
                 return;
             }
 
-            $schoolId = $data["school_id"];
+            $schoolId = (int)$data["school_id"];
         }
 
         $ticket = new Ticket();
-
         $payload = [
             "title" => $data["title"] ?? null,
-            "description" => $data["description"],
+            "description" => $data["description"] ?? null,
             "school_id" => $schoolId,
-            "category_id" => $data["category_id"],
+            "category_id" => $data["category_id"] ?? null,
             "opened_by" => $loggedUser->getId(),
             "status" => Ticket::OPEN,
             "priority" => Ticket::MEAN,
@@ -112,9 +102,7 @@ class TicketController extends Controller
         );
 
         if ($errors) {
-
             flash_old($data);
-
             foreach ($errors as $error) {
                 Message::warning($error);
             }
@@ -123,13 +111,10 @@ class TicketController extends Controller
         }
 
         try {
-
             $ticket->fill($payload);
             $ticket->setOpenedAt();
             $ticket->save();
-
         } catch (\InvalidArgumentException $invalidArgumentException) {
-
             Message::error($invalidArgumentException->getMessage());
             redirect("/professor/chamados/cadastrar");
             return;
