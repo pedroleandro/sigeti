@@ -61,17 +61,4 @@ class Auth
             return;
         }
     }
-
-    public static function requireRole(string $role): void
-    {
-        self::requireLogin();
-
-        $user = self::user();
-
-        if (($user->role ?? null) !== $role) {
-            Message::error("Você não tem autorização para acessar esta página.");
-            redirect("/erro/403");
-            return;
-        }
-    }
 }
