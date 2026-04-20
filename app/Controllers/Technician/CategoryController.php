@@ -5,25 +5,21 @@ namespace App\Controllers\Technician;
 use App\Core\Auth;
 use App\Core\Controller;
 use App\Core\Message;
+use App\Core\Permission;
 use App\Models\Category;
-use App\Models\User;
 
 class CategoryController extends Controller
 {
     public function __construct()
     {
         parent::__construct("App");
-
-        Auth::requireRole(User::TECHNICIAN);
+        Auth::requirePermission(Permission::VIEW_CATEGORIES);
     }
 
     public function index(): void
     {
-        $categoryModel = new Category();
-
-        $categories = $categoryModel
+        $categories = (new Category())
             ->orderBy("name", "ASC")
-            ->orderBy("created_at", "DESC")
             ->get();
 
         echo $this->view->render("technician/category/index", [
@@ -35,13 +31,16 @@ class CategoryController extends Controller
 
     public function create(): void
     {
-        echo $this->view->render("technician/category/create");
+        Auth::requirePermission(Permission::CREATE_CATEGORY);
 
+        echo $this->view->render("technician/category/create");
         clear_old();
     }
 
     public function store(?array $data): void
     {
+        Auth::requirePermission(Permission::CREATE_CATEGORY);
+
         $this->validateCsrfToken($data, "/tecnico/categorias/cadastrar");
 
         $newCategory = new Category();
@@ -49,7 +48,7 @@ class CategoryController extends Controller
         try {
             $newCategory->fill([
                 "name" => $data["name"],
-                "description" => $data["description"] ?? null
+                "description" => $data["description"] ?? null,
             ]);
 
             $errors = array_merge(
@@ -58,14 +57,12 @@ class CategoryController extends Controller
             );
 
             if ($errors) {
-
                 flash_old($data);
-
                 foreach ($errors as $error) {
                     Message::warning($error);
                 }
-
                 redirect("/tecnico/categorias/cadastrar");
+                return;
             }
 
             $newCategory->save();
@@ -81,7 +78,9 @@ class CategoryController extends Controller
 
     public function edit(?array $data): void
     {
-        $category = Category::find($data['id']);
+        Auth::requirePermission(Permission::EDIT_CATEGORY);
+
+        $category = Category::find($data["id"]);
 
         if (!$category) {
             Message::warning("Categoria não encontrada ou não existe.");
@@ -98,9 +97,11 @@ class CategoryController extends Controller
 
     public function update(?array $data): void
     {
+        Auth::requirePermission(Permission::EDIT_CATEGORY);
+
         $this->validateCsrfToken($data, "/tecnico/categorias/editar/" . $data["id"]);
 
-        $category = Category::find($data['id']);
+        $category = Category::find($data["id"]);
 
         if (!$category) {
             Message::warning("Categoria não encontrada ou não existe.");
@@ -109,10 +110,9 @@ class CategoryController extends Controller
         }
 
         try {
-
             $category->fill([
                 "name" => $data["name"],
-                "description" => $data["description"] ?? null
+                "description" => $data["description"] ?? null,
             ]);
 
             $errors = array_merge(
@@ -121,36 +121,32 @@ class CategoryController extends Controller
             );
 
             if ($errors) {
-
                 flash_old($data);
-
                 foreach ($errors as $error) {
                     Message::warning($error);
                 }
-
                 redirect("/tecnico/categorias/editar/" . $category->getId());
+                return;
             }
 
             $category->save();
         } catch (\InvalidArgumentException $invalidArgumentException) {
-
             Message::error($invalidArgumentException->getMessage());
             redirect("/tecnico/categorias/editar/" . $category->getId());
             return;
-
         }
 
         Message::success("Categoria atualizada com sucesso.");
         redirect("/tecnico/categorias/editar/" . $category->getId());
-
     }
 
-    //Novo
     public function destroy(?array $data): void
     {
+        Auth::requirePermission(Permission::DELETE_CATEGORY);
+
         $this->validateCsrfToken($data, "/tecnico/categorias");
 
-        $category = Category::find($data['id']);
+        $category = Category::find($data["id"]);
 
         if (!$category) {
             Message::error("Categoria não encontrada ou não existe.");
@@ -159,7 +155,7 @@ class CategoryController extends Controller
         }
 
         if ($category->existsTickets()) {
-            Message::warning("Esta categoria possui chamado(s) vinculado(s) e não pode ser deletada.");
+            Message::warning("Esta categoria possui chamados vinculados e não pode ser excluída.");
             redirect("/tecnico/categorias");
             return;
         }
@@ -167,12 +163,12 @@ class CategoryController extends Controller
         try {
             $category->delete();
         } catch (\InvalidArgumentException $invalidArgumentException) {
-            Message::error("Não foi possível excluir a categoria.");
+            Message::error($invalidArgumentException->getMessage());
             redirect("/tecnico/categorias");
             return;
         }
 
-        Message::success("Categoria deletada em segurança com sucesso.");
+        Message::success("Categoria excluída em segurança com sucesso.");
         redirect("/tecnico/categorias");
     }
 }

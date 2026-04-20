@@ -5,17 +5,16 @@ namespace App\Controllers\Technician;
 use App\Core\Auth;
 use App\Core\Controller;
 use App\Core\Message;
+use App\Core\Permission;
 use App\Models\Ticket\Ticket;
 use App\Models\Ticket\TicketComment;
-use App\Models\User;
 
 class TicketCommentController extends Controller
 {
     public function __construct()
     {
         parent::__construct("App");
-
-        Auth::requireRole(User::TECHNICIAN);
+        Auth::requirePermission(Permission::COMMENT_TICKET);
     }
 
     public function index(?array $data): void
@@ -24,15 +23,13 @@ class TicketCommentController extends Controller
 
         if (!$ticket) {
             Message::warning("Chamado não encontrado ou não existe.");
-            redirect('/tecnico/chamados');
+            redirect("/tecnico/chamados");
             return;
         }
 
-        $comments = TicketComment::commentsByTicketId($data["ticket_id"]);
-
         echo $this->view->render("technician/ticket/comments", [
             "ticket" => $ticket,
-            "comments" => $comments,
+            "comments" => TicketComment::commentsByTicketId($data["ticket_id"]),
         ]);
 
         clear_old();
@@ -53,7 +50,6 @@ class TicketCommentController extends Controller
         }
 
         $comment = new TicketComment();
-
         $payload = [
             "ticket_id" => $ticketId,
             "user_id" => Auth::user()->id,
@@ -66,13 +62,10 @@ class TicketCommentController extends Controller
         );
 
         if ($errors) {
-
             flash_old($data);
-
             foreach ($errors as $error) {
                 Message::warning($error);
             }
-
             redirect("/tecnico/chamados/{$ticketId}/comentarios");
             return;
         }
@@ -92,6 +85,8 @@ class TicketCommentController extends Controller
 
     public function destroy(?array $data): void
     {
+        Auth::requirePermission(Permission::DELETE_ANY_COMMENT);
+
         $ticketId = (int)($data["ticket_id"] ?? 0);
         $commentId = (int)($data["id"] ?? 0);
 
@@ -109,26 +104,22 @@ class TicketCommentController extends Controller
 
         if (!$comment) {
             Message::warning("Comentário não encontrado ou não existe.");
-            redirect("/tecnico/chamados/{$ticketId}/comentarios/excluir/{$commentId}");
+            redirect("/tecnico/chamados/{$ticketId}/comentarios");
             return;
         }
 
         if ($comment->getTicketId() !== $ticketId) {
             Message::warning("Este comentário não pertence ao chamado informado.");
-            redirect("/tecnico/chamados/{$ticketId}/comentarios/excluir/{$commentId}");
+            redirect("/tecnico/chamados/{$ticketId}/comentarios");
             return;
         }
 
         try {
-
             $comment->delete();
-
-        } catch (\Exception $invalidArgumentException) {
-
+        } catch (\InvalidArgumentException $invalidArgumentException) {
             Message::error($invalidArgumentException->getMessage());
-            redirect("/tecnico/chamados/{$ticketId}/comentarios/excluir/{$commentId}");
+            redirect("/tecnico/chamados/{$ticketId}/comentarios");
             return;
-
         }
 
         Message::success("Comentário excluído em segurança com sucesso.");
