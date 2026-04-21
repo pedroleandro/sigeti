@@ -12,9 +12,6 @@
 
     <div class="page-heading">
         <h3>Dashboard</h3>
-        <p class="text-subtitle text-muted">
-            Bem-vindo(a), <strong><?= htmlspecialchars(\App\Core\Auth::user()->name) ?></strong>
-        </p>
     </div>
 
     <?= \App\Core\Message::render() ?>
@@ -32,7 +29,7 @@
                                 <div class="row">
                                     <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
                                         <div class="stats-icon blue mb-2">
-                                            <i class="bi bi-people-fill"></i>
+                                            <i class="iconly-boldProfile"></i>
                                         </div>
                                     </div>
                                     <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
@@ -50,7 +47,7 @@
                                 <div class="row">
                                     <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
                                         <div class="stats-icon purple mb-2">
-                                            <i class="bi bi-shield-fill"></i>
+                                            <i class="iconly-boldShield-Done"></i>
                                         </div>
                                     </div>
                                     <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
@@ -68,7 +65,7 @@
                                 <div class="row">
                                     <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
                                         <div class="stats-icon green mb-2">
-                                            <i class="bi bi-diagram-3-fill"></i>
+                                            <i class="iconly-boldFilter"></i>
                                         </div>
                                     </div>
                                     <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
@@ -86,7 +83,7 @@
                                 <div class="row">
                                     <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
                                         <div class="stats-icon red mb-2">
-                                            <i class="bi bi-ticket-detailed-fill"></i>
+                                            <i class="iconly-boldTicket"></i>
                                         </div>
                                     </div>
                                     <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
