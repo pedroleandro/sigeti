@@ -31,10 +31,13 @@ class SchoolUser extends AbstractModel
 
     public const WHOLE = "integral";
 
+    public const NOT_APPLICABLE = "nao_aplicavel";
+
     private const SHIFTS = [
         self::MORNING,
         self::AFTERNOON,
-        self::WHOLE
+        self::WHOLE,
+        self::NOT_APPLICABLE
     ];
 
     public function getId(): ?int
