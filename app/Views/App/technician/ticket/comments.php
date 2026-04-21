@@ -148,8 +148,8 @@ $loggedUserId = \App\Core\Auth::user()->id;
                                     $createdAt = $comment->getCreatedAt()
                                             ? date('d/m/Y H:i', strtotime($comment->getCreatedAt()))
                                             : '—';
-                                    $role = $commentUser?->getRole();
-                                    $avatarColor = $role === \App\Models\User::TECHNICIAN ? '#435ebe' : '#6c757d';
+                                    $roleName = $commentUser?->role()?->getName();
+                                    $avatarColor = $roleName === 'Técnico' ? '#435ebe' : '#6c757d';
                                     ?>
 
                                     <div class="d-flex <?= $isOwn ? 'justify-content-end' : 'justify-content-start' ?> mb-3">

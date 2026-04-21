@@ -105,13 +105,13 @@
                                             <label for="role" class="form-label">Perfil</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-shield-fill"></i></span>
-                                                <select name="role" id="role" class="form-select" required>
-                                                    <option value="professor" <?= $user->getRole() === \App\Models\User::TEACHER ? 'selected' : '' ?>>
-                                                        Professor
-                                                    </option>
-                                                    <option value="tecnico" <?= $user->getRole() === \App\Models\User::TECHNICIAN ? 'selected' : '' ?>>
-                                                        Técnico
-                                                    </option>
+                                                <select name="role_id" id="role_id" class="form-select" required>
+                                                    <?php foreach ($roles as $role): ?>
+                                                        <option value="<?= $role->getId() ?>"
+                                                                <?= $user->getRoleId() === $role->getId() ? 'selected' : '' ?>>
+                                                            <?= htmlspecialchars($role->getName()) ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
                                                 </select>
                                             </div>
                                         </div>
@@ -141,7 +141,7 @@
 
                                 <!-- Bloco Escola + Turno -->
                                 <div id="schoolLinks"
-                                     style="display: <?= $user->getRole() === \App\Models\User::TEACHER ? 'block' : 'none' ?>;">
+                                     style="display: <?= in_array($user->role()?->getName(), ['Técnico', 'Administrador']) ? 'none' : 'block' ?>;"
                                     <hr>
                                     <h6 class="fw-bold mb-3">
                                         <i class="bi bi-building me-1"></i>
@@ -284,7 +284,9 @@
     <?php endforeach; ?>`;
 
     roleSelect.addEventListener('change', function () {
-        schoolLinks.style.display = this.value === 'professor' ? 'block' : 'none';
+        const selectedText = this.options[this.selectedIndex].text;
+        const hideFor = ['Técnico', 'Administrador'];
+        schoolLinks.style.display = hideFor.includes(selectedText) ? 'none' : 'block';
     });
 
     document.getElementById('addSchoolLink').addEventListener('click', function () {

@@ -72,11 +72,9 @@
                                                 <?= htmlspecialchars($user->getEmail()) ?>
                                             </td>
                                             <td>
-                                                <?php if ($user->getRole() === \App\Models\User::TECHNICIAN): ?>
-                                                    <span class="badge bg-primary">Técnico</span>
-                                                <?php else: ?>
-                                                    <span class="badge bg-success">Professor</span>
-                                                <?php endif; ?>
+                                                <span class="badge bg-primary">
+                                                    <?= htmlspecialchars($user->role()?->getName() ?? '—') ?>
+                                                </span>
                                             </td>
                                             <td>
                                                 <?php $status = $user->getStatus(); ?>

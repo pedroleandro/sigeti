@@ -44,7 +44,7 @@
                                      class="rounded-circle"
                                      style="width: 300px; height: 300px; object-fit: cover; border: 4px solid #435ebe;">
                                 <h3 class="mt-3"><?= $user->getName() ?></h3>
-                                <p class="text-small text-muted"><?= ucfirst($user->getRole()) ?? \App\Models\User::TEACHER ?></p>
+                                <p class="text-small text-muted"><?= $user->role()?->getName() ?? '—' ?></p>
                             </div>
                         </div>
                     </div>
@@ -142,7 +142,7 @@
                                         </span>
                                         <input disabled type="text" name="role" id="role"
                                                class="form-control"
-                                               value="<?= $user->getRole() ?>">
+                                               value="<?= $user->role()?->getName() ?? '—' ?>"
                                     </div>
                                     <small class="text-muted">O perfil é definido pelo administrador.</small>
                                 </div>

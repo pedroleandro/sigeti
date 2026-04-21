@@ -253,45 +253,36 @@ class Ticket extends AbstractModel
         }
 
         if (!empty($data['opened_by'])) {
-
             $openedBy = User::find((int)$data['opened_by']);
 
             if (!$openedBy) {
                 $errors[] = "Usuário não encontrado ou não existe.";
-            } elseif ($openedBy->getRole() !== User::TEACHER) {
-                $errors[] = "O usuário selecionado não tem o perfil de PROFESSOR.";
+            } else {
+                $linksSchoolUser = $openedBy->schoolUserLinks();
+                $validSchoolsIds = [];
+
+                /** @var SchoolUser $link */
+                foreach ($linksSchoolUser ?? [] as $link) {
+                    $validSchoolsIds[] = $link->getSchoolId();
+                }
+
+                if (!empty($data['school_id']) && !in_array((int)$data['school_id'], $validSchoolsIds, true)) {
+                    $errors[] = "Escola selecionada não está vinculada ao usuário selecionado.";
+                }
             }
-
-            $linksSchoolUser = $openedBy->schoolUserLinks();
-
-            $validSchoolsIds = [];
-
-            /** @var SchoolUser $link */
-            foreach ($linksSchoolUser as $link) {
-                $validSchoolsIds[] = $link->getSchoolId();
-            }
-
-            if (!in_array((int)$data['school_id'], $validSchoolsIds, true)) {
-                $errors[] = "Escola selecionada não está vinculada ao professor selecionado.";
-            }
-
         }
 
         if (!empty($data['assigned_to'])) {
-
             $assignedTo = User::find((int)$data['assigned_to']);
 
             if (!$assignedTo) {
-                $errors[] = "Usuário não encontrado ou não existe.";
-            } elseif ($assignedTo->getRole() !== User::TECHNICIAN) {
-                $errors[] = "O usuário selecionado não tem o perfil de TÉCNICO.";
+                $errors[] = "Técnico não encontrado ou não existe.";
             }
         }
 
         return $errors;
     }
 
-    //Novo
     public function validateStatusTransition(string $newStatus): array
     {
         $current = $this->getStatus();
@@ -321,7 +312,6 @@ class Ticket extends AbstractModel
         return [];
     }
 
-    //Novo
     public function allOrdered(): array
     {
         $sql = "SELECT * FROM {$this->table}
@@ -338,7 +328,6 @@ class Ticket extends AbstractModel
         return array_map(static fn($row) => static::hydrate($row), $rows);
     }
 
-    //Novo
     public function validateBusinessRulesForTeacher(array $data): array
     {
         $errors = [];
@@ -350,7 +339,6 @@ class Ticket extends AbstractModel
         return $errors;
     }
 
-    //Novo
     public function allOrderedByUser(int $userId): array
     {
         $sql = "SELECT * FROM {$this->table}
@@ -368,13 +356,11 @@ class Ticket extends AbstractModel
         return array_map(static fn($row) => static::hydrate($row), $rows);
     }
 
-    //Novo
     public function existsComments(): bool
     {
         return (new TicketComment())->where("ticket_id", "=", $this->getId())->count() > 0;
     }
 
-    //Novo
     public function countByStatusCurrentYear(): array
     {
         $year = date('Y');
