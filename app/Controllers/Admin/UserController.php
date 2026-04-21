@@ -57,7 +57,7 @@ class UserController extends Controller
                 "name" => $data["name"],
                 "email" => $data["email"],
                 "password" => $data["password"],
-                "document" => $data["document"] ?? null,
+                "document" => !empty($data["document"]) ? $data["document"] : null,
                 "role_id" => $data["role_id"],
                 "status" => $data["status"],
             ]);
@@ -67,11 +67,17 @@ class UserController extends Controller
                 $newUser->validateBusinessRule()
             );
 
-            if (!empty($data["schools"])) {
-                $errors = array_merge(
-                    $errors,
-                    SchoolUser::validateSchoolUserLinks($data["schools"])
-                );
+            $validSchools = [];
+
+            foreach ($data["schools"] ?? [] as $school) {
+                if (!empty($school["school_id"])) {
+                    $validSchools[] = $school;
+                }
+            }
+
+            if (!empty($validSchools)) {
+                $linkErrors = SchoolUser::validateSchoolUserLinks($validSchools);
+                $errors     = array_merge($errors, $linkErrors);
             }
 
             if ($errors) {
@@ -87,8 +93,8 @@ class UserController extends Controller
 
             UserProfile::createForUser($newUser->getId());
 
-            if (!empty($data["schools"])) {
-                $this->synchronizeSchoolUser($newUser->getId(), $data["schools"]);
+            if (!empty($validSchools)) {
+                $this->synchronizeSchoolUser($newUser->getId(), $validSchools);
             }
 
         } catch (\InvalidArgumentException $invalidArgumentException) {
@@ -147,6 +153,8 @@ class UserController extends Controller
 
             if (!empty($data["document"])) {
                 $user->setDocument($data["document"]);
+            } else {
+                $user->setDocument(null);
             }
 
             if (!empty($data["password"])) {
@@ -158,11 +166,17 @@ class UserController extends Controller
                 $user->validateBusinessRule($user->getId())
             );
 
-            if (!empty($data["schools"])) {
-                $errors = array_merge(
-                    $errors,
-                    SchoolUser::validateSchoolUserLinks($data["schools"])
-                );
+            $validSchools = [];
+
+            foreach ($data["schools"] ?? [] as $school) {
+                if (!empty($school["school_id"])) {
+                    $validSchools[] = $school;
+                }
+            }
+
+            if (!empty($validSchools)) {
+                $linkErrors = SchoolUser::validateSchoolUserLinks($validSchools);
+                $errors = array_merge($errors, $linkErrors);
             }
 
             if ($errors) {
@@ -178,8 +192,8 @@ class UserController extends Controller
 
             $this->removeSchoolUserLinks($user->getId());
 
-            if (!empty($data["schools"])) {
-                $this->synchronizeSchoolUser($user->getId(), $data["schools"]);
+            if (!empty($validSchools)) {
+                $this->synchronizeSchoolUser($user->getId(), $validSchools);
             }
 
         } catch (\InvalidArgumentException $invalidArgumentException) {
