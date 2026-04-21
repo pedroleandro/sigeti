@@ -248,6 +248,10 @@ class AuthController extends Controller
 
     private function resolveHomeByPermission(): string
     {
+        if (Auth::hasPermission(Permission::VIEW_USERS)) {
+            return "/admin/dashboard";
+        }
+
         if (Auth::hasPermission(Permission::VIEW_TECHNICIAN_DASHBOARD)) {
             return "/tecnico/dashboard";
         }
