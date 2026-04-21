@@ -151,19 +151,22 @@
                                 <div class="form-group">
                                     <label for="school" class="form-label">Escola(s)</label>
                                     <div class="input-group">
-                                        <?php if ($user->schools()): ?>
-
-                                            <?php foreach ($user->schools() as $school): ?>
+                                        <?php $schoolLinks = $user->schoolUserLinks(); ?>
+                                        <?php if (!empty($schoolLinks)): ?>
+                                            <?php foreach ($schoolLinks as $link): ?>
                                                 <span class="input-group-text">
-                                                        <i class="bi bi-building-fill"></i>
-                                                    </span>
+                                                    <i class="bi bi-building-fill"></i>
+                                                </span>
                                                 <input disabled type="text" name="school" id="school"
                                                        class="form-control"
-                                                       value="<?= $school->getName() ?>">
+                                                       value="<?= htmlspecialchars($link->school()?->getName() ?? '—') ?>">
                                             <?php endforeach; ?>
-
                                         <?php else: ?>
-
+                                            <span class="input-group-text">
+                                                <i class="bi bi-building-fill"></i>
+                                            </span>
+                                            <input disabled type="text" class="form-control"
+                                                   value="Nenhuma escola vinculada">
                                         <?php endif; ?>
                                     </div>
                                     <small class="text-muted">A escola é definida pelo administrador.</small>
