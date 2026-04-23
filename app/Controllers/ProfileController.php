@@ -21,10 +21,12 @@ class ProfileController extends Controller
     {
         $user = User::find(Auth::user()->id);
         $profile = UserProfile::findByUser($user->getId());
+        $layout = $this->resolveLayout();
 
         echo $this->view->render("account/profile", [
             "user" => $user,
             "profile" => $profile,
+            "layout" => $layout
         ]);
 
         clear_old();
@@ -82,7 +84,11 @@ class ProfileController extends Controller
     {
         Auth::requirePermission(Permission::CHANGE_OWN_PASSWORD);
 
-        echo $this->view->render("account/security");
+        $layout = $this->resolveLayout();
+
+        echo $this->view->render("account/security", [
+            "layout" => $layout
+        ]);
         clear_old();
     }
 
@@ -134,5 +140,18 @@ class ProfileController extends Controller
         Auth::logout();
         Message::success("Senha atualizada com sucesso. Por favor, entre novamente.");
         redirect("/entrar");
+    }
+
+    private function resolveLayout(): string
+    {
+        if (Auth::hasPermission(Permission::VIEW_USERS)) {
+            return 'admin/app';
+        }
+
+        if (Auth::hasPermission(Permission::VIEW_TECHNICIAN_DASHBOARD)) {
+            return 'technician/app';
+        }
+
+        return 'teacher/app';
     }
 }
