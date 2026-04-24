@@ -26,3 +26,5 @@ define("PASSWORD_SENDGRID", $_ENV['PASSWORD_SENDGRID'] ?? "secret");
 define("APP_DEVELOPER", $_ENV['APP_DEVELOPER'] ?? "Curso Técnico em Informática Para Internet");
 
 define("TICKET_MAX_ATTACHMENTS", $_ENV['TICKET_MAX_ATTACHMENTS'] ?? 10);
+define("UPLOAD_MAX_SIZE", $_ENV['UPLOAD_MAX_SIZE'] ?? 5 * 1024 * 1024);
+const UPLOAD_PATH = __DIR__ . "/../storage/uploads";
