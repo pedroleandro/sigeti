@@ -12,6 +12,11 @@ $router->post("/chamados/cadastrar", "Teacher\\TicketController@store");
 $router->get("/chamados/{ticket_id}/comentarios", "Teacher\\TicketCommentController@index");
 $router->post("/chamados/{ticket_id}/comentarios", "Teacher\\TicketCommentController@store");
 
+/** Rotas de Anexos */
+$router->post("/chamados/{ticket_id}/anexos", "Teacher\\TicketAttachmentController@store");
+$router->get("/chamados/{ticket_id}/anexos/download/{id}", "Teacher\\TicketAttachmentController@download");
+$router->delete("/chamados/{ticket_id}/anexos/excluir/{id}", "Teacher\\TicketAttachmentController@destroy");
+
 /** Rotas de Perfil */
 $router->get("/perfil", "Teacher\\ProfileController@index");
 $router->post("/perfil", "Teacher\\ProfileController@update");

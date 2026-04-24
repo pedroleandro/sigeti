@@ -41,6 +41,11 @@ $router->post("/chamados/{ticket_id}/comentarios", "Technician\\TicketCommentCon
 $router->put("/chamados/{ticket_id}/comentarios/editar/{id}", "Technician\\TicketCommentController@update");
 $router->delete("/chamados/{ticket_id}/comentarios/excluir/{id}", "Technician\\TicketCommentController@destroy");
 
+/** Rotas de Anexos */
+$router->post("/chamados/{ticket_id}/anexos", "Technician\\TicketAttachmentController@store");
+$router->get("/chamados/{ticket_id}/anexos/download/{id}", "Technician\\TicketAttachmentController@download");
+$router->delete("/chamados/{ticket_id}/anexos/excluir/{id}", "Technician\\TicketAttachmentController@destroy");
+
 /** Rotas de Perfil */
 $router->get("/perfil", "Technician\\ProfileController@index");
 $router->post("/perfil", "Technician\\ProfileController@update");
