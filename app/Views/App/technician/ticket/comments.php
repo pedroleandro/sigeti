@@ -4,9 +4,7 @@
         "submenuActive" => "todos",
 ]) ?>
 
-<?php
-$loggedUserId = \App\Core\Auth::user()->id;
-?>
+<?php $loggedUserId = \App\Core\Auth::user()->id; ?>
 
 <div id="main">
     <header class="mb-3">
@@ -14,6 +12,7 @@ $loggedUserId = \App\Core\Auth::user()->id;
             <i class="bi bi-justify fs-3"></i>
         </a>
     </header>
+
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
@@ -130,7 +129,7 @@ $loggedUserId = \App\Core\Auth::user()->id;
                             <h5 class="card-title mb-0">
                                 <i class="bi bi-chat-dots-fill me-2"></i>
                                 Comentários
-                                <?php if ($comments ?? null): ?>
+                                <?php if (!empty($comments)): ?>
                                     <span class="badge bg-primary ms-1"><?= count($comments) ?></span>
                                 <?php else: ?>
                                     <span class="badge bg-primary ms-1">0</span>
@@ -151,28 +150,19 @@ $loggedUserId = \App\Core\Auth::user()->id;
                                     $roleName = $commentUser?->role()?->getName();
                                     $avatarColor = $roleName === 'Técnico' ? '#435ebe' : '#6c757d';
                                     ?>
-
                                     <div class="d-flex <?= $isOwn ? 'justify-content-end' : 'justify-content-start' ?> mb-3">
                                         <div style="max-width: 75%;">
-
-                                            <!-- Cabeçalho -->
-                                            <div class="d-flex align-items-center gap-2 mb-1
-                                <?= $isOwn ? 'justify-content-end' : 'justify-content-start' ?>">
-
+                                            <div class="d-flex align-items-center gap-2 mb-1 <?= $isOwn ? 'justify-content-end' : 'justify-content-start' ?>">
                                                 <?php if (!$isOwn): ?>
-                                                    <div class="rounded-circle d-flex align-items-center justify-content-center
-                                        text-white fw-bold flex-shrink-0"
-                                                         style="width: 28px; height: 28px; font-size: 13px;
-                                                                 background: <?= $avatarColor ?>;">
+                                                    <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold flex-shrink-0"
+                                                         style="width: 28px; height: 28px; font-size: 13px; background: <?= $avatarColor ?>;">
                                                         <?= $initial ?>
                                                     </div>
                                                 <?php endif; ?>
-
                                                 <small class="fw-semibold text-muted"><?= $userName ?></small>
                                                 <small class="text-muted" style="font-size: 11px;">
                                                     <i class="bi bi-clock me-1"></i><?= $createdAt ?>
                                                 </small>
-
                                                 <button type="button"
                                                         class="btn btn-sm btn-outline-danger py-0 px-1 flex-shrink-0"
                                                         style="font-size: 11px; line-height: 1.4;"
@@ -180,33 +170,23 @@ $loggedUserId = \App\Core\Auth::user()->id;
                                                         data-bs-target="#modalExcluirComment<?= $comment->getId() ?>">
                                                     <i class="bi bi-trash-fill"></i>
                                                 </button>
-
                                                 <?php if ($isOwn): ?>
-                                                    <div class="rounded-circle d-flex align-items-center justify-content-center
-                                        text-white fw-bold flex-shrink-0"
-                                                         style="width: 28px; height: 28px; font-size: 13px;
-                                                                 background: <?= $avatarColor ?>;">
+                                                    <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold flex-shrink-0"
+                                                         style="width: 28px; height: 28px; font-size: 13px; background: <?= $avatarColor ?>;">
                                                         <?= $initial ?>
                                                     </div>
                                                 <?php endif; ?>
                                             </div>
-
                                             <div class="px-3 py-2 shadow-sm"
-                                                 style="
-                                                         background: <?= $isOwn ? '#435ebe' : '#ffffff' ?>;
-                                                         color: <?= $isOwn ? '#ffffff' : '#333333' ?>;
-                                                         border: 1px solid <?= $isOwn ? '#3a50a8' : '#dee2e6' ?>;
-                                                         border-radius: <?= $isOwn ? '12px 0 12px 12px' : '0 12px 12px 12px' ?>;
-                                                         ">
+                                                 style="background: <?= $isOwn ? '#435ebe' : '#ffffff' ?>; color: <?= $isOwn ? '#ffffff' : '#333333' ?>; border: 1px solid <?= $isOwn ? '#3a50a8' : '#dee2e6' ?>; border-radius: <?= $isOwn ? '12px 0 12px 12px' : '0 12px 12px 12px' ?>;">
                                                 <p class="mb-0" style="font-size: 14px;">
                                                     <?= htmlspecialchars($comment->getComment()) ?>
                                                 </p>
                                             </div>
-
                                         </div>
                                     </div>
 
-                                    <!-- Modal Excluir -->
+                                    <!-- Modal Excluir Comentário -->
                                     <div class="modal fade text-left"
                                          id="modalExcluirComment<?= $comment->getId() ?>"
                                          tabindex="-1" role="dialog" aria-hidden="true">
@@ -244,7 +224,6 @@ $loggedUserId = \App\Core\Auth::user()->id;
                                             </div>
                                         </div>
                                     </div>
-
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <div class="text-center text-muted fst-italic py-5">
@@ -252,6 +231,150 @@ $loggedUserId = \App\Core\Auth::user()->id;
                                     Nenhum comentário ainda. Seja o primeiro a comentar!
                                 </div>
                             <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <!-- Anexos -->
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-paperclip me-2"></i>
+                                Anexos
+                                <?php if (!empty($attachments)): ?>
+                                    <span class="badge bg-secondary ms-1"><?= count($attachments) ?></span>
+                                <?php else: ?>
+                                    <span class="badge bg-secondary ms-1">0</span>
+                                <?php endif; ?>
+                            </h5>
+                            <small class="text-muted">
+                                Máximo <?= TICKET_MAX_ATTACHMENTS ?> anexos — JPG, PNG, WEBP, PDF, DOC, DOCX — até 5MB
+                                cada
+                            </small>
+                        </div>
+                        <div class="card-body">
+
+                            <?php if (!empty($attachments)): ?>
+                                <div class="row mb-4">
+                                    <?php foreach ($attachments as $attachment): ?>
+                                        <div class="col-12 col-md-6 mb-3">
+                                            <div class="d-flex align-items-center gap-3 p-3 border rounded">
+                                                <?php if ($attachment->isImage()): ?>
+                                                    <i class="bi bi-file-image-fill text-primary fs-4 flex-shrink-0"></i>
+                                                <?php else: ?>
+                                                    <i class="bi bi-file-earmark-fill text-secondary fs-4 flex-shrink-0"></i>
+                                                <?php endif; ?>
+                                                <div class="flex-grow-1 overflow-hidden">
+                                                    <p class="mb-0 fw-semibold text-truncate" style="font-size: 13px;">
+                                                        <?= htmlspecialchars($attachment->getOriginalName()) ?>
+                                                    </p>
+                                                    <small class="text-muted">
+                                                        <?= number_format($attachment->getFileSize() / 1024, 1) ?> KB
+                                                        —
+                                                        <?= $attachment->getCreatedAt()
+                                                                ? date('d/m/Y H:i', strtotime($attachment->getCreatedAt()))
+                                                                : '—' ?>
+                                                    </small>
+                                                </div>
+                                                <div class="d-flex gap-1 flex-shrink-0">
+                                                    <a href="<?= url('/tecnico/chamados/' . $ticket->getId() . '/anexos/download/' . $attachment->getId()) ?>"
+                                                       class="btn btn-sm btn-outline-primary"
+                                                       title="Baixar">
+                                                        <i class="bi bi-download"></i>
+                                                    </a>
+                                                    <button type="button"
+                                                            class="btn btn-sm btn-outline-danger"
+                                                            title="Excluir"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#modalExcluirAnexo<?= $attachment->getId() ?>">
+                                                        <i class="bi bi-trash-fill"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Modal Excluir Anexo -->
+                                        <div class="modal fade text-left"
+                                             id="modalExcluirAnexo<?= $attachment->getId() ?>"
+                                             tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header bg-danger">
+                                                        <h5 class="modal-title white">
+                                                            <i class="bi bi-trash-fill me-2"></i>
+                                                            Excluir Anexo
+                                                        </h5>
+                                                        <button type="button" class="close"
+                                                                data-bs-dismiss="modal" aria-label="Close">
+                                                            <i data-feather="x"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Tem certeza que deseja excluir o anexo
+                                                        <strong><?= htmlspecialchars($attachment->getOriginalName()) ?></strong>?
+                                                        <br>
+                                                        <small class="text-muted">Esta ação não poderá ser
+                                                            desfeita.</small>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-light-secondary"
+                                                                data-bs-dismiss="modal">
+                                                            <span class="d-none d-sm-block">Cancelar</span>
+                                                        </button>
+                                                        <form action="<?= url('/tecnico/chamados/' . $ticket->getId() . '/anexos/excluir/' . $attachment->getId()) ?>"
+                                                              method="POST" class="d-inline">
+                                                            <?= csrf_input() ?>
+                                                            <input type="hidden" name="_method" value="DELETE">
+                                                            <button type="submit" class="btn btn-danger ms-1">
+                                                                <span class="d-none d-sm-block">Confirmar</span>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php else: ?>
+                                <p class="text-muted fst-italic mb-4">
+                                    <i class="bi bi-paperclip me-1"></i>
+                                    Nenhum anexo enviado ainda.
+                                </p>
+                            <?php endif; ?>
+
+                            <?php if (count($attachments ?? []) < TICKET_MAX_ATTACHMENTS): ?>
+                                <form action="<?= url('/tecnico/chamados/' . $ticket->getId() . '/anexos') ?>"
+                                      method="post"
+                                      enctype="multipart/form-data">
+                                    <?= csrf_input() ?>
+                                    <div class="form-group">
+                                        <label for="attachment" class="form-label">Enviar novo anexo</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class="bi bi-paperclip"></i>
+                                            </span>
+                                            <input type="file" name="attachment" id="attachment"
+                                                   class="form-control"
+                                                   accept=".jpg,.jpeg,.png,.webp,.pdf,.doc,.docx"
+                                                   required>
+                                        </div>
+                                        <small class="text-muted">
+                                            Formatos aceitos: JPG, PNG, WEBP, PDF, DOC, DOCX — Tamanho máximo: 5MB
+                                        </small>
+                                    </div>
+                                    <div class="form-group mt-3">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="bi bi-upload me-1"></i>
+                                            Enviar Anexo
+                                        </button>
+                                    </div>
+                                </form>
+                            <?php else: ?>
+                                <div class="alert alert-warning mb-0">
+                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                    Este chamado atingiu o limite máximo de <?= TICKET_MAX_ATTACHMENTS ?> anexos.
+                                </div>
+                            <?php endif; ?>
+
                         </div>
                     </div>
 
