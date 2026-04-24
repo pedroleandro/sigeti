@@ -102,7 +102,7 @@ class TicketController extends Controller
             "ticket" => $ticket,
             "schools" => School::all(),
             "categories" => Category::all(),
-            "users" => User::all(),
+            "technicians" => User::usersByPermission(Permission::TAKE_TICKET)
         ]);
 
         clear_old();
