@@ -7,6 +7,7 @@ use App\Core\Controller;
 use App\Core\Message;
 use App\Core\Permission;
 use App\Models\Ticket\Ticket;
+use App\Models\Ticket\TicketAttachment;
 use App\Models\Ticket\TicketComment;
 
 class TicketCommentController extends Controller
@@ -27,9 +28,13 @@ class TicketCommentController extends Controller
             return;
         }
 
+        $comments = TicketComment::commentsByTicketId($ticket->getId());
+        $attachments = TicketAttachment::byTicket($ticket->getId());
+
         echo $this->view->render("technician/ticket/comments", [
             "ticket" => $ticket,
-            "comments" => TicketComment::commentsByTicketId($data["ticket_id"]),
+            "comments" => $comments,
+            "attachments" => $attachments,
         ]);
 
         clear_old();
