@@ -228,6 +228,33 @@ class User extends AbstractModel
         return (new static())->where("reset_token", "=", $hash)->first();
     }
 
+    public static function usersByPermission(string $permission): array
+    {
+        $instance = new static();
+
+        $sql = "SELECT DISTINCT users.*
+            FROM users
+            INNER JOIN roles ON roles.id = users.role_id
+            INNER JOIN role_permissions ON role_permissions.role_id = roles.id
+            INNER JOIN permissions ON permissions.id = role_permissions.permission_id
+            WHERE permissions.name = :permission
+              AND users.status = 'ativo'
+              AND users.deleted_at IS NULL";
+
+        $statement = $instance->connection->prepare($sql);
+        $statement->bindValue(":permission", $permission, \PDO::PARAM_STR);
+        $statement->execute();
+
+        $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        $users = [];
+        foreach ($rows as $row) {
+            $users[] = static::hydrate($row);
+        }
+
+        return $users;
+    }
+
     public function departments(): array
     {
         return UserDepartment::linksByUser($this->getId());
