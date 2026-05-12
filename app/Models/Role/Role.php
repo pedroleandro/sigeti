@@ -122,4 +122,18 @@ class Role extends AbstractModel
 
         return $errors;
     }
+
+    public function totalRoles(): ?int
+    {
+        return (new static())
+            ->count();
+    }
+
+    public function recentlyCreatedAndNonDeletedRoles(): ?array
+    {
+        return (new static())
+            ->orderBy("created_at", "DESC")
+            ->limit(5)
+            ->get();
+    }
 }

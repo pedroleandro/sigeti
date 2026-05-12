@@ -20,25 +20,23 @@ class DashboardController extends Controller
 
     public function index(): void
     {
-        $totalUsers = (new User())->count();
-        $totalRoles = (new Role())->count();
-        $totalDepartments = (new Department())->count();
-        $totalOpenTickets = (new Ticket())->where("status", "=", Ticket::OPEN)->count();
+        Auth::requirePermission(Permission::VIEW_MANAGER_DASHBOARD);
 
-        $recentUsers = (new User())
-            ->orderBy("created_at", "DESC")
-            ->limit(5)
-            ->get();
+        $totalUsers = (new User())->totalNumberOfActiveAndRegisteredUsersNotDeleted();
+        $totalRoles = (new Role())->totalRoles();
+        $totalDepartments = (new Department())->totalDepartments();
+        $totalOpenTickets = (new Ticket())->totalTicketsOpened();
 
-        $roles = Role::all();
+        $recentUsers = (new User())->recentlyCreatedActiveRegisteredAndNonDeletedUsers();
+        $recentRoles = (new Role())->recentlyCreatedAndNonDeletedRoles();
 
         echo $this->view->render("admin/dashboard", [
             "totalUsers" => $totalUsers,
             "totalRoles" => $totalRoles,
             "totalDepartments" => $totalDepartments,
             "totalOpenTickets" => $totalOpenTickets,
+            "recentRoles" => $recentRoles,
             "recentUsers" => $recentUsers,
-            "roles" => $roles,
         ]);
     }
 }

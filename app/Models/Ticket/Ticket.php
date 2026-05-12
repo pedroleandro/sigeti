@@ -727,4 +727,11 @@ class Ticket extends AbstractModel
 
         return $results;
     }
+
+    public function totalTicketsOpened(): ?int
+    {
+        return (new static())
+            ->where("status", "=", self::OPEN)
+            ->count();
+    }
 }

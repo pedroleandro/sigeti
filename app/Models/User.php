@@ -339,4 +339,21 @@ class User extends AbstractModel
 
         return $errors;
     }
+
+    public function totalNumberOfActiveAndRegisteredUsersNotDeleted(): ?int
+    {
+        return (new static())
+            ->where("status", "!=", 'inativo')
+            ->orderBy("created_at", "DESC")
+            ->count();
+    }
+
+    public function recentlyCreatedActiveRegisteredAndNonDeletedUsers(): ?array
+    {
+        return (new static())
+            ->where("status", "!=", 'inativo')
+            ->orderBy("created_at", "DESC")
+            ->limit(5)
+            ->get();
+    }
 }

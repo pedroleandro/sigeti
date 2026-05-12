@@ -181,8 +181,8 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php if (!empty($roles)): ?>
-                                    <?php foreach ($roles as $role): ?>
+                                <?php if (!empty($recentRoles)): ?>
+                                    <?php foreach ($recentRoles as $role): ?>
                                         <tr>
                                             <td>
                                                 <i class="bi bi-shield-fill text-primary me-1"></i>
