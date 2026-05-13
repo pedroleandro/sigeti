@@ -1,5 +1,5 @@
-<?= $this->layout('technician/app', [
-    'title' => $title ?? "Técnico | Escolas - " . APP_NAME,
+<?= $this->layout('admin/app', [
+    'title' => $title ?? "Administrador | Escolas - " . APP_NAME,
     'menuActive' => 'escolas',
     'submenuActive' => 'todos',
 ]) ?>
@@ -20,7 +20,7 @@
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="<?= url('/tecnico/dashboard') ?>">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="<?= url('/admin/dashboard') ?>">Dashboard</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Escolas</li>
                         </ol>
                     </nav>
@@ -38,7 +38,7 @@
                             <i class="bi bi-building me-2"></i>
                             Todas as Escolas
                         </h5>
-                        <a href="<?= url('/tecnico/escolas/cadastrar') ?>" class="btn btn-primary btn-sm">
+                        <a href="<?= url('/admin/escolas/cadastrar') ?>" class="btn btn-primary btn-sm">
                             <i class="bi bi-plus-circle-fill me-1"></i>
                             Nova Escola
                         </a>
@@ -74,7 +74,7 @@
                                                 <?= htmlspecialchars($school->getAddress()) ?>
                                             </td>
                                             <td>
-                                                <a href="<?= url('/tecnico/escolas/editar/' . $school->getId()) ?>"
+                                                <a href="<?= url('/admin/escolas/editar/' . $school->getId()) ?>"
                                                    class="btn btn-sm btn-warning">
                                                     <i class="bi bi-pencil-fill"></i>
                                                     <span class="d-none d-xl-inline ms-1">Editar</span>
@@ -115,7 +115,7 @@
                                                                     <i class="bx bx-x d-block d-sm-none"></i>
                                                                     <span class="d-none d-sm-block">Cancelar</span>
                                                                 </button>
-                                                                <form action="<?= url('/tecnico/escolas/excluir/' . $school->getId()) ?>"
+                                                                <form action="<?= url('/admin/escolas/excluir/' . $school->getId()) ?>"
                                                                       method="POST" class="d-inline">
                                                                     <?= csrf_input() ?>
                                                                     <input type="hidden" name="_method" value="DELETE">
@@ -136,7 +136,7 @@
                                         <td colspan="5" class="text-center text-muted fst-italic py-4">
                                             <i class="bi bi-inbox-fill me-2"></i>
                                             Nenhuma escola cadastrada ainda.
-                                            <a href="<?= url('/tecnico/escolas/cadastrar') ?>">Cadastrar a primeira</a>
+                                            <a href="<?= url('/admin/escolas/cadastrar') ?>">Cadastrar a primeira</a>
                                         </td>
                                     </tr>
                                 <?php endif; ?>

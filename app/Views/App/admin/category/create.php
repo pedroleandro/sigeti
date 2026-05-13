@@ -1,5 +1,5 @@
-<?= $this->layout('technician/app', [
-        "title" => $title ?? "Técnico | Nova Categoria - " . APP_NAME,
+<?= $this->layout('admin/app', [
+        "title" => $title ?? "Administrador | Nova Categoria - " . APP_NAME,
         "menuActive" => "categorias",
         "submenuActive" => "nova",
 ]) ?>
@@ -20,8 +20,8 @@
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="<?= url('/tecnico/dashboard') ?>">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="<?= url('/tecnico/categorias') ?>">Categorias</a></li>
+                            <li class="breadcrumb-item"><a href="<?= url('/admin/dashboard') ?>">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="<?= url('/admin/categorias') ?>">Categorias</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Nova</li>
                         </ol>
                     </nav>
@@ -43,7 +43,7 @@
                         </div>
                         <div class="card-body">
 
-                            <form action="<?= url('/tecnico/categorias/cadastrar') ?>" method="post">
+                            <form action="<?= url('/admin/categorias/cadastrar') ?>" method="post">
 
                                 <?= csrf_input() ?>
 

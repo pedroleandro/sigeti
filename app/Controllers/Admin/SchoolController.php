@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Technician;
+namespace App\Controllers\Admin;
 
 use App\Core\Auth;
 use App\Core\Controller;
@@ -19,7 +19,7 @@ class SchoolController extends Controller
     {
         $schools = (new School())->orderBy("name", "ASC")->get();
 
-        echo $this->view->render("technician/school/index", [
+        echo $this->view->render("admin/school/index", [
             "schools" => $schools
         ]);
 
@@ -30,7 +30,7 @@ class SchoolController extends Controller
     {
         Auth::requirePermission(Permission::CREATE_SCHOOL);
 
-        echo $this->view->render("technician/school/create");
+        echo $this->view->render("admin/school/create");
         clear_old();
     }
 
@@ -38,7 +38,7 @@ class SchoolController extends Controller
     {
         Auth::requirePermission(Permission::CREATE_SCHOOL);
 
-        $this->validateCsrfToken($data, "/tecnico/escolas/cadastrar");
+        $this->validateCsrfToken($data, "/admin/escolas/cadastrar");
 
         $newSchool = new School();
 
@@ -59,19 +59,19 @@ class SchoolController extends Controller
                 foreach ($errors as $error) {
                     Message::warning($error);
                 }
-                redirect("/tecnico/escolas/cadastrar");
+                redirect("/admin/escolas/cadastrar");
                 return;
             }
 
             $newSchool->save();
         } catch (\InvalidArgumentException $invalidArgumentException) {
             Message::error($invalidArgumentException->getMessage());
-            redirect("/tecnico/escolas/cadastrar");
+            redirect("/admin/escolas/cadastrar");
             return;
         }
 
         Message::success("Escola cadastrada com sucesso.");
-        redirect("/tecnico/escolas/editar/" . $newSchool->getId());
+        redirect("/admin/escolas/editar/" . $newSchool->getId());
     }
 
     public function edit(?array $data): void
@@ -82,11 +82,11 @@ class SchoolController extends Controller
 
         if (!$school) {
             Message::warning("Escola não encontrada ou não existe.");
-            redirect("/tecnico/escolas");
+            redirect("/admin/escolas");
             return;
         }
 
-        echo $this->view->render("technician/school/edit", [
+        echo $this->view->render("admin/school/edit", [
             "school" => $school
         ]);
 
@@ -97,13 +97,13 @@ class SchoolController extends Controller
     {
         Auth::requirePermission(Permission::EDIT_SCHOOL);
 
-        $this->validateCsrfToken($data, "/tecnico/escolas/editar/" . $data["id"]);
+        $this->validateCsrfToken($data, "/admin/escolas/editar/" . $data["id"]);
 
         $school = School::find($data["id"]);
 
         if (!$school) {
             Message::error("Escola não encontrada ou não existe.");
-            redirect("/tecnico/escolas");
+            redirect("/admin/escolas");
             return;
         }
 
@@ -124,44 +124,44 @@ class SchoolController extends Controller
                 foreach ($errors as $error) {
                     Message::warning($error);
                 }
-                redirect("/tecnico/escolas/editar/" . $school->getId());
+                redirect("/admin/escolas/editar/" . $school->getId());
                 return;
             }
 
             $school->save();
         } catch (\InvalidArgumentException $invalidArgumentException) {
             Message::error($invalidArgumentException->getMessage());
-            redirect("/tecnico/escolas/editar/" . $school->getId());
+            redirect("/admin/escolas/editar/" . $school->getId());
             return;
         }
 
         Message::success("Escola atualizada com sucesso.");
-        redirect("/tecnico/escolas/editar/" . $school->getId());
+        redirect("/admin/escolas/editar/" . $school->getId());
     }
 
     public function destroy(?array $data): void
     {
         Auth::requirePermission(Permission::DELETE_SCHOOL);
 
-        $this->validateCsrfToken($data, "/tecnico/escolas");
+        $this->validateCsrfToken($data, "/admin/escolas");
 
         $school = School::find($data["id"]);
 
         if (!$school) {
             Message::error("Escola não encontrada ou não existe.");
-            redirect("/tecnico/escolas");
+            redirect("/admin/escolas");
             return;
         }
 
         if ($school->existsUsers()) {
             Message::warning("Esta escola possui usuários vinculados e não pode ser excluída.");
-            redirect("/tecnico/escolas");
+            redirect("/admin/escolas");
             return;
         }
 
         if ($school->existsTickets()) {
             Message::warning("Esta escola possui chamados vinculados e não pode ser excluída.");
-            redirect("/tecnico/escolas");
+            redirect("/admin/escolas");
             return;
         }
 
@@ -169,11 +169,11 @@ class SchoolController extends Controller
             $school->delete();
         } catch (\InvalidArgumentException $invalidArgumentException) {
             Message::error($invalidArgumentException->getMessage());
-            redirect("/tecnico/escolas");
+            redirect("/admin/escolas");
             return;
         }
 
         Message::success("Escola excluída em segurança com sucesso.");
-        redirect("/tecnico/escolas");
+        redirect("/admin/escolas");
     }
 }

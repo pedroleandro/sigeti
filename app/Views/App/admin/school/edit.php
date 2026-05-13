@@ -1,7 +1,7 @@
-<?= $this->layout('technician/app', [
-        "title" => $title ?? "Técnico | Nova Escola - " . APP_NAME,
-        "menuActive" => "escolas",
-        "submenuActive" => "nova",
+<?= $this->layout('admin/app', [
+    "title" => $title ?? "Administrador | Editar Escola - " . APP_NAME,
+    "menuActive" => "escolas",
+    "submenuActive" => "todos",
 ]) ?>
 
 <div id="main">
@@ -14,15 +14,15 @@
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Nova Escola</h3>
-                    <p class="text-subtitle text-muted">Preencha as informações para cadastrar uma nova escola</p>
+                    <h3>Editar Escola</h3>
+                    <p class="text-subtitle text-muted">Altere as informações da escola</p>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="<?= url('/tecnico/dashboard') ?>">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="<?= url('/tecnico/escolas') ?>">Escolas</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Nova</li>
+                            <li class="breadcrumb-item"><a href="<?= url('/admin/dashboard') ?>">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="<?= url('/admin/escolas') ?>">Escolas</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Editar</li>
                         </ol>
                     </nav>
                 </div>
@@ -37,14 +37,16 @@
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">
-                                <i class="bi bi-building me-2"></i>
-                                Informações da Escola
+                                <i class="bi bi-pencil-fill me-2"></i>
+                                Editar Escola
                             </h4>
                         </div>
                         <div class="card-body">
-                            <form action="<?= url('/tecnico/escolas/cadastrar') ?>" method="post">
+                            <form action="<?= url('/admin/escolas/editar/' . $school->getId()) ?>" method="post">
 
                                 <?= csrf_input() ?>
+
+                                <input type="hidden" name="_method" value="PUT">
 
                                 <!-- Nome -->
                                 <div class="form-group">
@@ -55,8 +57,8 @@
                                         </span>
                                         <input type="text" name="name" id="name"
                                                class="form-control"
-                                               value="<?= old('name') ?>"
                                                placeholder="Nome da escola"
+                                               value="<?= old('name', htmlspecialchars($school->getName())) ?>"
                                                required>
                                     </div>
                                 </div>
@@ -70,8 +72,8 @@
                                         </span>
                                         <input type="text" name="code" id="code"
                                                class="form-control"
-                                               value="<?= old('code') ?>"
                                                placeholder="Código da escola (8 caracteres)"
+                                               value="<?= old('code', htmlspecialchars($school->getCode()))?>"
                                                maxlength="8"
                                                required>
                                     </div>
@@ -87,8 +89,8 @@
                                         </span>
                                         <input type="text" name="address" id="address"
                                                class="form-control"
-                                               value="<?= old('address') ?>"
                                                placeholder="Endereço completo da escola"
+                                               value="<?= old('address', htmlspecialchars($school->getAddress()))?>"
                                                required>
                                     </div>
                                 </div>
@@ -97,8 +99,12 @@
                                 <div class="form-group mt-4 d-flex gap-2">
                                     <button type="submit" class="btn btn-primary">
                                         <i class="bi bi-check-circle-fill me-1"></i>
-                                        Salvar Escola
+                                        Atualizar
                                     </button>
+                                    <a href="<?= url('/admin/escolas') ?>" class="btn btn-secondary">
+                                        <i class="bi bi-arrow-left-circle-fill me-1"></i>
+                                        Cancelar
+                                    </a>
                                 </div>
                             </form>
                         </div>
