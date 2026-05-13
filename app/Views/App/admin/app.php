@@ -127,10 +127,10 @@
                         </a>
                         <ul class="submenu">
                             <li class="submenu-item <?= ($menuActive ?? '') === 'escolas' && ($submenuActive ?? '') === 'nova' ? 'active' : '' ?>">
-                                <a href="<?= url('/tecnico/escolas/cadastrar') ?>" class="submenu-link">Nova</a>
+                                <a href="<?= url('/admin/escolas/cadastrar') ?>" class="submenu-link">Nova</a>
                             </li>
                             <li class="submenu-item <?= ($menuActive ?? '') === 'escolas' && ($submenuActive ?? '') === 'todos' ? 'active' : '' ?>">
-                                <a href="<?= url('/tecnico/escolas') ?>" class="submenu-link">Todas</a>
+                                <a href="<?= url('/admin/escolas') ?>" class="submenu-link">Todas</a>
                             </li>
                         </ul>
                     </li>
@@ -142,10 +142,10 @@
                         </a>
                         <ul class="submenu">
                             <li class="submenu-item <?= ($menuActive ?? '') === 'categorias' && ($submenuActive ?? '') === 'nova' ? 'active' : '' ?>">
-                                <a href="<?= url('/tecnico/categorias/cadastrar') ?>" class="submenu-link">Nova</a>
+                                <a href="<?= url('/admin/categorias/cadastrar') ?>" class="submenu-link">Nova</a>
                             </li>
                             <li class="submenu-item <?= ($menuActive ?? '') === 'categorias' && ($submenuActive ?? '') === 'todos' ? 'active' : '' ?>">
-                                <a href="<?= url('/tecnico/categorias') ?>" class="submenu-link">Todas</a>
+                                <a href="<?= url('/admin/categorias') ?>" class="submenu-link">Todas</a>
                             </li>
                         </ul>
                     </li>

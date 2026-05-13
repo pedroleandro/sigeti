@@ -16,10 +16,3 @@ $router->post("/chamados/{ticket_id}/comentarios", "Teacher\\TicketCommentContro
 $router->post("/chamados/{ticket_id}/anexos", "Teacher\\TicketAttachmentController@store");
 $router->get("/chamados/{ticket_id}/anexos/download/{id}", "Teacher\\TicketAttachmentController@download");
 $router->delete("/chamados/{ticket_id}/anexos/excluir/{id}", "Teacher\\TicketAttachmentController@destroy");
-
-/** Rotas de Perfil */
-$router->get("/perfil", "Teacher\\ProfileController@index");
-$router->post("/perfil", "Teacher\\ProfileController@update");
-
-$router->get("/seguranca", "Teacher\\ProfileController@security");
-$router->post("/seguranca", "Teacher\\ProfileController@updatePassword");

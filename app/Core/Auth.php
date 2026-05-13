@@ -20,7 +20,7 @@ class Auth
     public static function roleId(): ?int
     {
         $user = self::user();
-        return isset($user->role_id) ? (int) $user->role_id : null;
+        return isset($user->role_id) ? (int)$user->role_id : null;
     }
 
     public static function hasPermission(string $permission): bool
@@ -56,7 +56,6 @@ class Auth
         self::requireLogin();
 
         if (!self::hasPermission($permission)) {
-            Message::error("Você não tem autorização para acessar esta página.");
             redirect("/erro/403");
             return;
         }

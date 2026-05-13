@@ -133,11 +133,11 @@
 
                         <ul class="submenu ">
                             <li class="submenu-item <?= ($menuActive ?? '') === 'conta' && ($submenuActive ?? '') === 'perfil' ? 'active' : '' ?>">
-                                <a href="<?= url('/tecnico/perfil') ?>" class="submenu-link">Perfil</a>
+                                <a href="<?= url('/perfil') ?>" class="submenu-link">Perfil</a>
                             </li>
 
                             <li class="submenu-item <?= ($menuActive ?? '') === 'conta' && ($submenuActive ?? '') === 'seguranca' ? 'active' : '' ?>">
-                                <a href="<?= url('/tecnico/seguranca') ?>" class="submenu-link">Segurança</a>
+                                <a href="<?= url('/seguranca') ?>" class="submenu-link">Segurança</a>
                             </li>
                         </ul>
                     </li>
