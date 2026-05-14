@@ -13,31 +13,17 @@ class UserDepartment extends AbstractModel
 
     protected array $fillable = [
         "user_id",
-        "department_id",
-        "shift",
+        "department_id"
     ];
 
     protected array $required = [
         "user_id" => "O campo USUÁRIO é obrigatório.",
-        "department_id" => "O campo DEPARTAMENTO é obrigatório.",
-        "shift" => "O campo TURNO é obrigatório.",
+        "department_id" => "O campo DEPARTAMENTO é obrigatório."
     ];
 
     protected bool $timestamps = true;
 
     protected bool $softDelete = true;
-
-    public const MORNING = "manha";
-    public const AFTERNOON = "tarde";
-    public const WHOLE = "integral";
-    public const NOT_APPLICABLE = "nao_aplicavel";
-
-    private const SHIFTS = [
-        self::MORNING,
-        self::AFTERNOON,
-        self::WHOLE,
-        self::NOT_APPLICABLE,
-    ];
 
     public function getId(): ?int
     {
@@ -70,22 +56,6 @@ class UserDepartment extends AbstractModel
     public function getDepartmentId(): int
     {
         return $this->attributes["department_id"];
-    }
-
-    public function setShift(?string $shift): void
-    {
-        $shift = $shift ?? self::NOT_APPLICABLE;
-
-        if (!in_array($shift, self::SHIFTS, true)) {
-            throw new \InvalidArgumentException("O turno informado é inválido.");
-        }
-
-        $this->attributes["shift"] = $shift;
-    }
-
-    public function getShift(): ?string
-    {
-        return $this->attributes["shift"] ?? null;
     }
 
     public function department(): ?Department

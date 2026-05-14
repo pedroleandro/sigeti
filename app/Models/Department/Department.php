@@ -150,7 +150,7 @@ class Department extends AbstractModel
     public function existsTickets(): bool
     {
         return (new Ticket())
-                ->where("school_id", "=", $this->getId())
+                ->where("department_id", "=", $this->getId())
                 ->count() > 0;
     }
 
