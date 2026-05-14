@@ -7,7 +7,7 @@ use App\Core\Controller;
 use App\Core\Message;
 use App\Core\Permission;
 use App\Models\Category;
-use App\Models\School;
+use App\Models\Department\Department;
 use App\Models\Ticket\Ticket;
 use App\Models\User;
 
@@ -33,7 +33,7 @@ class TicketController extends Controller
         Auth::requirePermission(Permission::OPEN_TICKET);
 
         echo $this->view->render("technician/ticket/create", [
-            "schools" => School::all(),
+            "departments" => (new Department())->orderBy('name','ASC')->get(),
             "categories" => Category::all(),
             "users" => User::all(),
         ]);
