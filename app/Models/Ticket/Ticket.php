@@ -4,8 +4,8 @@ namespace App\Models\Ticket;
 
 use App\Core\AbstractModel;
 use App\Models\Category;
-use App\Models\School;
-use App\Models\SchoolUser;
+use App\Models\Department\Department;
+use App\Models\Department\UserDepartment;
 use App\Models\User;
 use PDO;
 
@@ -18,7 +18,7 @@ class Ticket extends AbstractModel
     protected array $fillable = [
         "title",
         "description",
-        "school_id",
+        "department_id",
         "category_id",
         "opened_by",
         "assigned_to",
@@ -31,9 +31,9 @@ class Ticket extends AbstractModel
     protected array $required = [
         "title" => "O campo TÍTULO é obrigatório.",
         "description" => "O campo DESCRIÇÃO é obrigatório.",
-        "school_id" => "O campo ESCOLA é obrigatório.",
+        "department_id" => "O campo DEPARTAMENTO é obrigatório.",
         "category_id" => "O campo CATEGORIA é obrigatório.",
-        "opened_by" => "O campo PROFESSOR é obrigatório.",
+        "opened_by" => "O campo SOLICITANTE é obrigatório.",
         "status" => "O campo STATUS é obrigatório.",
         "priority" => "O campo PRIORIDADE é obrigatório."
     ];
@@ -74,8 +74,7 @@ class Ticket extends AbstractModel
         self::MEAN,
         self::HIGH
     ];
-
-    //Novo
+    
     private const ALLOWED_TRANSITIONS = [
         self::OPEN => [self::IN_PROGRESS, self::ARCHIVED],
         self::IN_PROGRESS => [self::WAITING, self::RESOLVED, self::ARCHIVED],
@@ -126,14 +125,14 @@ class Ticket extends AbstractModel
         return $this->attributes["description"];
     }
 
-    public function setSchoolId(int $schoolId): void
+    public function setDepartmentId(int $departmentId): void
     {
-        $this->attributes["school_id"] = $schoolId;
+        $this->attributes["department_id"] = $departmentId;
     }
 
-    public function getSchoolId(): int
+    public function getDepartmentId(): int
     {
-        return $this->attributes["school_id"];
+        return $this->attributes["department_id"];
     }
 
     public function setCategoryId(int $categoryId): void
@@ -220,9 +219,9 @@ class Ticket extends AbstractModel
         return $this->attributes["closed_at"] ?? null;
     }
 
-    public function school(): ?School
+    public function department(): ?Department
     {
-        return $this->getSchoolId() > 0 ? School::find($this->getSchoolId()) : null;
+        return $this->getDepartmentId() > 0 ? Department::find($this->getDepartmentId()) : null;
     }
 
     public function category(): ?Category
@@ -248,8 +247,8 @@ class Ticket extends AbstractModel
             $errors[] = "Categoria não encontrada ou não existe.";
         }
 
-        if (!empty($data['school_id']) && !School::find((int)$data['school_id'])) {
-            $errors[] = "Escola não encontrada ou não existe.";
+        if (!empty($data['department_id']) && !Department::find((int)$data['department_id'])) {
+            $errors[] = "Departamento não encontrado ou não existe.";
         }
 
         if (!empty($data['opened_by'])) {
@@ -258,16 +257,15 @@ class Ticket extends AbstractModel
             if (!$openedBy) {
                 $errors[] = "Usuário não encontrado ou não existe.";
             } else {
-                $linksSchoolUser = $openedBy->schoolUserLinks();
-                $validSchoolsIds = [];
+                $validDepartmentIds  = [];
 
-                /** @var SchoolUser $link */
-                foreach ($linksSchoolUser ?? [] as $link) {
-                    $validSchoolsIds[] = $link->getSchoolId();
+                /** @var UserDepartment $link */
+                foreach (UserDepartment::linksByUser($openedBy->getId()) ?? [] as $link) {
+                    $validDepartmentIds [] = $link->getDepartmentId();
                 }
 
-                if (!empty($data['school_id']) && !in_array((int)$data['school_id'], $validSchoolsIds, true)) {
-                    $errors[] = "Escola selecionada não está vinculada ao usuário selecionado.";
+                if (!empty($data['department_id']) && !in_array((int)$data['department_id'], $validDepartmentIds , true)) {
+                    $errors[] = "Departamento selecionado não está vinculada ao usuário selecionado.";
                 }
             }
         }
@@ -427,7 +425,7 @@ class Ticket extends AbstractModel
         SELECT c.name AS label, COUNT(t.id) AS total
         FROM tickets t
         JOIN categories c ON c.id = t.category_id
-        WHERE YEAR(t.created_at) = :year
+        WHERE YEAR(t.opened_at) = :year
         GROUP BY c.name
         ORDER BY c.name
     ";
