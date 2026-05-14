@@ -260,27 +260,15 @@ class User extends AbstractModel
         return UserDepartment::linksByUser($this->getId());
     }
 
-    public function schools(): ?array
+    public function departmentUserLinks(): array
     {
-        return (new SchoolUser())->where("user_id", "=", $this->getId())->get();
-    }
-
-    public function schoolUserLinks(): ?array
-    {
-        return (new SchoolUser())->where("user_id", "=", $this->getId())->get();
+        return UserDepartment::linksByUser($this->getId());
     }
 
     public function existsTickets(): bool
     {
         return (new Ticket())
                 ->where("opened_by", "=", $this->getId())
-                ->count() > 0;
-    }
-
-    public function existsSchoolLinks(): bool
-    {
-        return (new SchoolUser())
-                ->where("user_id", "=", $this->getId())
                 ->count() > 0;
     }
 
