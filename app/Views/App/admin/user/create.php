@@ -147,46 +147,34 @@
                                     <hr>
                                     <h6 class="fw-bold mb-3">
                                         <i class="bi bi-building me-1"></i>
-                                        Escolas e Turnos
+                                        Departamento
                                     </h6>
                                     <div id="schoolLinksList">
                                         <div class="school-link-row row mb-2">
                                             <div class="col-12 col-md-7 mb-2 mb-md-0">
                                                 <div class="input-group">
                                                     <span class="input-group-text"><i class="bi bi-building"></i></span>
-                                                    <select name="schools[0][school_id]" class="form-select">
-                                                        <option disabled value="" selected>Selecione a escola</option>
-                                                        <?php if (!empty($schools)): ?>
-                                                            <?php foreach ($schools as $school): ?>
+                                                    <select name="departments[0][department_id]" class="form-select">
+                                                        <option disabled value="" selected>Selecione o departamento</option>
+                                                        <?php if (!empty($departments)): ?>
+                                                            <?php foreach ($departments as $school): ?>
                                                                 <option value="<?= $school->getId() ?>">
                                                                     <?= htmlspecialchars($school->getName()) ?>
                                                                 </option>
                                                             <?php endforeach; ?>
                                                         <?php else: ?>
-                                                            <option disabled value="">Nenhuma escola cadastrada</option>
+                                                            <option disabled value="">Nenhum departamento cadastrado</option>
                                                         <?php endif; ?>
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-12 col-md-5">
-                                                <div class="input-group">
-                                                    <span class="input-group-text"><i
-                                                                class="bi bi-clock-fill"></i></span>
-                                                    <select name="schools[0][shift]" class="form-select">
-                                                        <option value="" disabled selected>Selecione o turno</option>
-                                                        <option value="manha">Manhã</option>
-                                                        <option value="tarde">Tarde</option>
-                                                        <option value="integral">Integral</option>
-                                                        <option value="nao_aplicavel">Não aplicável</option>
-                                                    </select>
-                                                </div>
-                                            </div>
+
                                         </div>
                                     </div>
                                     <button type="button" class="btn btn-sm btn-outline-secondary mb-3"
                                             id="addSchoolLink">
                                         <i class="bi bi-plus-circle me-1"></i>
-                                        Adicionar outra escola
+                                        Adicionar outra departamento
                                     </button>
                                 </div>
 
@@ -229,9 +217,9 @@
     const schoolLinks = document.getElementById('schoolLinks');
     const schoolLinksList = document.getElementById('schoolLinksList');
     let rowIndex = 1;
-    const schoolOptions = `<?php foreach ($schools as $school): ?><option value="<?= $school->getId() ?>"><?= htmlspecialchars($school->getName()) ?></option><?php endforeach; ?>`;
+    const departmentOptions = `<?php foreach ($departments as $school): ?><option value="<?= $school->getId() ?>"><?= htmlspecialchars($school->getName()) ?></option><?php endforeach; ?>`;
 
-    const hideFor = ['Técnico', 'Administrador'];
+    const hideFor = ['Administrador'];
 
     const initialRoleText = roleSelect.options[roleSelect.selectedIndex].text;
     if (hideFor.includes(initialRoleText)) {
@@ -273,8 +261,8 @@
         <div class="col-12 col-md-7 mb-2 mb-md-0">
             <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-building"></i></span>
-                <select name="schools[${rowIndex}][school_id]" class="form-select">
-                    <option value="">Selecione a escola</option>
+                <select name="departments[${rowIndex}][department_id]" class="form-select">
+                    <option value="">Selecione a departamento</option>
                     ${schoolOptions}
                 </select>
             </div>
@@ -282,7 +270,7 @@
         <div class="col-12 col-md-4 mb-2 mb-md-0">
             <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-clock-fill"></i></span>
-                <select name="schools[${rowIndex}][shift]" class="form-select">
+                <select name="departments[${rowIndex}][shift]" class="form-select">
                     <option value="manha">Manhã</option>
                     <option value="tarde">Tarde</option>
                     <option value="integral">Integral</option>

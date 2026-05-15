@@ -143,50 +143,29 @@
                                     <hr>
                                     <h6 class="fw-bold mb-3">
                                         <i class="bi bi-building me-1"></i>
-                                        Escolas e Turnos
+                                        Departamentos
                                     </h6>
                                     <div id="schoolLinksList">
-                                        <?php if (!empty($userSchools)): ?>
-                                            <?php foreach ($userSchools as $index => $link): ?>
+                                        <?php if (!empty($userDepartments)): ?>
+                                            <?php foreach ($userDepartments as $index => $link): ?>
                                                 <div class="school-link-row row mb-2">
                                                     <div class="col-12 col-md-7 mb-2 mb-md-0">
                                                         <div class="input-group">
                                                             <span class="input-group-text"><i
                                                                         class="bi bi-building"></i></span>
-                                                            <select name="schools[<?= $index ?>][school_id]"
+                                                            <select name="departments[<?= $index ?>][department_id]"
                                                                     class="form-select">
-                                                                <option value="" disabled>Selecione a escola</option>
-                                                                <?php foreach ($schools as $school): ?>
-                                                                    <option value="<?= $school->getId() ?>"
-                                                                            <?= $link->getSchoolId() == $school->getId() ? 'selected' : '' ?>>
-                                                                        <?= htmlspecialchars($school->getName()) ?>
+                                                                <option value="" disabled>Selecione o departamento</option>
+                                                                <?php foreach ($departments as $department): ?>
+                                                                    <option value="<?= $department->getId() ?>"
+                                                                            <?= $link->getDepartmentId() == $department->getId() ? 'selected' : '' ?>>
+                                                                        <?= htmlspecialchars($department->getName()) ?>
                                                                     </option>
                                                                 <?php endforeach; ?>
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-12 <?= $index > 0 ? 'col-md-4' : 'col-md-5' ?> mb-2 mb-md-0">
-                                                        <div class="input-group">
-                                                            <span class="input-group-text"><i
-                                                                        class="bi bi-clock-fill"></i></span>
-                                                            <select name="schools[<?= $index ?>][shift]"
-                                                                    class="form-select">
-                                                                <option value="" disabled>Selecione o turno</option>
-                                                                <option value="manha" <?= $link->getShift() === \App\Models\SchoolUser::MORNING ? 'selected' : '' ?>>
-                                                                    Manhã
-                                                                </option>
-                                                                <option value="tarde" <?= $link->getShift() === \App\Models\SchoolUser::AFTERNOON ? 'selected' : '' ?>>
-                                                                    Tarde
-                                                                </option>
-                                                                <option value="integral" <?= $link->getShift() === \App\Models\SchoolUser::WHOLE ? 'selected' : '' ?>>
-                                                                    Integral
-                                                                </option>
-                                                                <option value="nao_aplicavel" <?= $link->getShift() === \App\Models\SchoolUser::NOT_APPLICABLE ? 'selected' : '' ?>>
-                                                                    Não aplicável
-                                                                </option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
+                                                    
                                                     <?php if ($index > 0): ?>
                                                         <div class="col-12 col-md-1 d-flex align-items-center mt-2 mt-md-0">
                                                             <button type="button"
@@ -203,29 +182,18 @@
                                                     <div class="input-group">
                                                         <span class="input-group-text"><i
                                                                     class="bi bi-building"></i></span>
-                                                        <select name="schools[0][school_id]" class="form-select">
-                                                            <option value="">Selecione a escola</option>
-                                                            <?php if (!empty($schools)): ?>
-                                                                <?php foreach ($schools as $school): ?>
-                                                                    <option value="<?= $school->getId() ?>">
-                                                                        <?= htmlspecialchars($school->getName()) ?>
+                                                        <select name="departments[0][department_id]" class="form-select">
+                                                            <option value="">Selecione o departamento</option>
+                                                            <?php if (!empty($departments)): ?>
+                                                                <?php foreach ($departments as $department): ?>
+                                                                    <option value="<?= $department->getId() ?>">
+                                                                        <?= htmlspecialchars($department->getName()) ?>
                                                                     </option>
                                                                 <?php endforeach; ?>
                                                             <?php else: ?>
-                                                                <option disabled value="">Nenhuma escola cadastrada
+                                                                <option disabled value="">Nenhum departamento cadastrado
                                                                 </option>
                                                             <?php endif; ?>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-12 col-md-5">
-                                                    <div class="input-group">
-                                                        <span class="input-group-text"><i class="bi bi-clock-fill"></i></span>
-                                                        <select name="schools[0][shift]" class="form-select">
-                                                            <option value="manha">Manhã</option>
-                                                            <option value="tarde">Tarde</option>
-                                                            <option value="integral">Integral</option>
-                                                            <option value="nao_aplicavel">Não aplicável</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -235,7 +203,7 @@
                                     <button type="button" class="btn btn-sm btn-outline-secondary mb-3"
                                             id="addSchoolLink">
                                         <i class="bi bi-plus-circle me-1"></i>
-                                        Adicionar outra escola
+                                        Adicionar outro departamento
                                     </button>
                                 </div>
 
@@ -277,10 +245,10 @@
     const roleSelect = document.getElementById('role_id');
     const schoolLinks = document.getElementById('schoolLinks');
     const schoolLinksList = document.getElementById('schoolLinksList');
-    let rowIndex = <?= max(count($userSchools ?? []), 1) ?>;
-    const schoolOptions = `<?php foreach ($schools as $school): ?><option value="<?= $school->getId() ?>"><?= htmlspecialchars($school->getName()) ?></option><?php endforeach; ?>`;
+    let rowIndex = <?= max(count($userdepartments ?? []), 1) ?>;
+    const departmentOptions = `<?php foreach ($departments as $department): ?><option value="<?= $department->getId() ?>"><?= htmlspecialchars($department->getName()) ?></option><?php endforeach; ?>`;
 
-    const hideFor = ['Técnico', 'Administrador'];
+    const hideFor = ['Administrador'];
 
     const initialRoleText = roleSelect.options[roleSelect.selectedIndex].text;
     if (hideFor.includes(initialRoleText)) {
@@ -322,16 +290,16 @@
         <div class="col-12 col-md-7 mb-2 mb-md-0">
             <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-building"></i></span>
-                <select name="schools[${rowIndex}][school_id]" class="form-select">
-                    <option value="">Selecione a escola</option>
-                    ${schoolOptions}
+                <select name="departments[${rowIndex}][department_id]" class="form-select">
+                    <option value="">Selecione o departamento</option>
+                    ${departmentOptions}
                 </select>
             </div>
         </div>
         <div class="col-12 col-md-4 mb-2 mb-md-0">
             <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-clock-fill"></i></span>
-                <select name="schools[${rowIndex}][shift]" class="form-select">
+                <select name="departments[${rowIndex}][shift]" class="form-select">
                     <option value="manha">Manhã</option>
                     <option value="tarde">Tarde</option>
                     <option value="integral">Integral</option>
