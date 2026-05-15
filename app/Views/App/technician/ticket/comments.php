@@ -63,7 +63,7 @@
                                     <small class="text-muted d-block">Escola</small>
                                     <span>
                                         <i class="bi bi-building text-primary me-1"></i>
-                                        <?= htmlspecialchars($ticket->school()?->getName() ?? '—') ?>
+                                        <?= htmlspecialchars($ticket->department()?->getName() ?? '—') ?>
                                     </span>
                                 </div>
                                 <div class="col-12 col-md-6 mb-3">

@@ -50,7 +50,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Título</th>
-                                    <th>Escola</th>
+                                    <th>Departamento</th>
                                     <th>Professor</th>
                                     <th>Técnico</th>
                                     <th>Prioridade</th>
@@ -70,7 +70,7 @@
                                             </td>
                                             <td>
                                                 <i class="bi bi-building text-muted me-1"></i>
-                                                <?= htmlspecialchars($ticket->school()?->getName() ?? '—') ?>
+                                                <?= htmlspecialchars($ticket->department()?->getName() ?? '—') ?>
                                             </td>
                                             <td>
                                                 <i class="bi bi-person-fill text-muted me-1"></i>

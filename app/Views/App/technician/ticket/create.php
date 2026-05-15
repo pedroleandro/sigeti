@@ -98,15 +98,15 @@
                                     <!-- Escola -->
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
-                                            <label for="school_id" class="form-label">Escola</label>
+                                            <label for="department_id" class="form-label">Escola</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-building"></i></span>
-                                                <select name="school_id" id="school_id" class="form-select" required>
+                                                <select name="department_id" id="department_id" class="form-select" required>
                                                     <option value="" disabled selected>Selecione a escola</option>
-                                                    <?php if ($schools): ?>
-                                                        <?php foreach ($schools as $school): ?>
-                                                            <option value="<?= $school->getId() ?>">
-                                                                <?= htmlspecialchars($school->getName()) ?>
+                                                    <?php if ($departments): ?>
+                                                        <?php foreach ($departments as $department): ?>
+                                                            <option value="<?= $department->getId() ?>">
+                                                                <?= htmlspecialchars($department->getName()) ?>
                                                             </option>
                                                         <?php endforeach; ?>
                                                     <?php else: ?>
