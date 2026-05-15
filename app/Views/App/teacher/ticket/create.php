@@ -97,11 +97,11 @@
                                     <!-- Escola -->
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
-                                            <label for="department_id" class="form-label">Escola</label>
+                                            <label for="department_id" class="form-label">Departamento</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-building"></i></span>
                                                 <select name="department_id" id="department_id" class="form-select" required>
-                                                    <option value="" disabled selected>Selecione a escola</option>
+                                                    <option value="" disabled selected>Selecione o departamento</option>
                                                     <?php if ($departments): ?>
                                                         <?php foreach ($departments as $department): ?>
                                                             <option value="<?= $department->getId() ?>">
@@ -109,7 +109,7 @@
                                                             </option>
                                                         <?php endforeach; ?>
                                                     <?php else: ?>
-                                                        <option value="">Nenhuma escola para selecionar</option>
+                                                        <option value="">Nenhum departamento para selecionar</option>
                                                     <?php endif; ?>
 
                                                 </select>
