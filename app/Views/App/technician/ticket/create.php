@@ -95,14 +95,14 @@
                                         </div>
                                     </div>
 
-                                    <!-- Escola -->
+                                    <!-- departamento -->
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
-                                            <label for="department_id" class="form-label">Escola</label>
+                                            <label for="department_id" class="form-label">Departamento</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-building"></i></span>
                                                 <select name="department_id" id="department_id" class="form-select" required>
-                                                    <option value="" disabled selected>Selecione a escola</option>
+                                                    <option value="" disabled selected>Selecione o departamento</option>
                                                     <?php if ($departments): ?>
                                                         <?php foreach ($departments as $department): ?>
                                                             <option value="<?= $department->getId() ?>">
@@ -110,7 +110,7 @@
                                                             </option>
                                                         <?php endforeach; ?>
                                                     <?php else: ?>
-                                                        <option value="">Nenhuma escola para selecionar</option>
+                                                        <option value="">Nenhum departamento para selecionar</option>
                                                     <?php endif; ?>
 
                                                 </select>
@@ -120,23 +120,23 @@
                                 </div>
 
                                 <div class="row">
-                                    <!-- Professor -->
+                                    <!-- Solicitante -->
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
-                                            <label for="opened_by" class="form-label">Professor</label>
+                                            <label for="opened_by" class="form-label">Solicitante</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
                                                 <select name="opened_by" id="opened_by" class="form-select" required>
-                                                    <option value="" disabled selected>Selecione o professor</option>
+                                                    <option value="" disabled selected>Selecione o Solicitante</option>
 
-                                                    <?php if ($teachers): ?>
-                                                        <?php foreach ($teachers as $teacher): ?>
-                                                            <option value="<?= $teacher->getId() ?>">
-                                                                <?= htmlspecialchars($teacher->getName()) ?>
+                                                    <?php if ($users): ?>
+                                                        <?php foreach ($users as $user): ?>
+                                                            <option value="<?= $user->getId() ?>">
+                                                                <?= htmlspecialchars($user->getName()) ?>
                                                             </option>
                                                         <?php endforeach; ?>
                                                     <?php else: ?>
-                                                        <option value="">Nenhum professor para selecionar</option>
+                                                        <option value="">Nenhum solicitante para selecionar</option>
                                                     <?php endif; ?>
 
                                                 </select>

@@ -1,5 +1,5 @@
 <?= $this->layout('teacher/app', [
-        "title" => $title ?? "Professor | Novo Chamado - " . APP_NAME,
+        "title" => $title ?? "Solicitante | Novo Chamado - " . APP_NAME,
         "menuActive" => "chamados",
         "submenuActive" => "novo",
 ]) ?>

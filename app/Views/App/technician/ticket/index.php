@@ -51,7 +51,7 @@
                                     <th>#</th>
                                     <th>Título</th>
                                     <th>Departamento</th>
-                                    <th>Professor</th>
+                                    <th>Solicitante</th>
                                     <th>Técnico</th>
                                     <th>Prioridade</th>
                                     <th>Status</th>

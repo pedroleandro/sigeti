@@ -1,5 +1,5 @@
 <?= $this->layout('teacher/app', [
-        "title" => $title ?? "Professor | Comentários - " . APP_NAME,
+        "title" => $title ?? "Solicitante | Comentários - " . APP_NAME,
         "menuActive" => "chamados",
         "submenuActive" => "todos",
 ]) ?>
@@ -63,7 +63,7 @@
                                     </span>
                                 </div>
                                 <div class="col-12 col-md-6 mb-3">
-                                    <small class="text-muted d-block">Professor</small>
+                                    <small class="text-muted d-block">Solicitante</small>
                                     <span>
                                         <i class="bi bi-person-fill text-primary me-1"></i>
                                         <?= htmlspecialchars($ticket->openedBy()?->getName() ?? '—') ?>

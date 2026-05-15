@@ -130,9 +130,10 @@ class Ticket extends AbstractModel
         $this->attributes["department_id"] = $departmentId;
     }
 
-    public function getDepartmentId(): int
+    //TODO alterar método para não retornar null, pois deve ter um departamento vinculado no ticket
+    public function getDepartmentId(): ?int
     {
-        return $this->attributes["department_id"];
+        return $this->attributes["department_id"] ?? null;
     }
 
     public function setCategoryId(int $categoryId): void

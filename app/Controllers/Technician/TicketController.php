@@ -100,7 +100,7 @@ class TicketController extends Controller
 
         echo $this->view->render("technician/ticket/edit", [
             "ticket" => $ticket,
-            "schools" => School::all(),
+            "departments" => Department::all(),
             "categories" => Category::all(),
             "technicians" => User::usersByPermission(Permission::TAKE_TICKET)
         ]);
