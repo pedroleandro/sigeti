@@ -7,10 +7,9 @@ use App\Core\Controller;
 use App\Core\Message;
 use App\Core\Permission;
 use App\Models\Auth\UserProfile;
+use App\Models\Department\Department;
 use App\Models\Department\UserDepartment;
 use App\Models\Role\Role;
-use App\Models\School;
-use App\Models\SchoolUser;
 use App\Models\User;
 
 class UserController extends Controller
@@ -24,30 +23,25 @@ class UserController extends Controller
     public function index(): void
     {
         $users = (new User())->orderBy("name")->get();
-
         echo $this->view->render("admin/user/index", [
             "users" => $users,
         ]);
-
         clear_old();
     }
 
     public function create(): void
     {
         Auth::requirePermission(Permission::CREATE_USER);
-
         echo $this->view->render("admin/user/create", [
             "roles" => Role::all(),
-            "schools" => School::all(),
+            "departments" => Department::all(),
         ]);
-
         clear_old();
     }
 
     public function store(?array $data): void
     {
         Auth::requirePermission(Permission::CREATE_USER);
-
         $this->validateCsrfToken($data, "/admin/usuarios/cadastrar");
 
         $newUser = new User();
@@ -67,17 +61,16 @@ class UserController extends Controller
                 $newUser->validateBusinessRule()
             );
 
-            $validSchools = [];
-
-            foreach ($data["schools"] ?? [] as $school) {
-                if (!empty($school["school_id"])) {
-                    $validSchools[] = $school;
+            $validDepartments = [];
+            foreach ($data["departments"] ?? [] as $dept) {
+                if (!empty($dept["department_id"])) {
+                    $validDepartments[] = $dept;
                 }
             }
 
-            if (!empty($validSchools)) {
-                $linkErrors = SchoolUser::validateSchoolUserLinks($validSchools);
-                $errors     = array_merge($errors, $linkErrors);
+            if (!empty($validDepartments)) {
+                $linkErrors = UserDepartment::validateDepartmentLinks($validDepartments);
+                $errors = array_merge($errors, $linkErrors);
             }
 
             if ($errors) {
@@ -90,15 +83,14 @@ class UserController extends Controller
             }
 
             $newUser->save();
-
             UserProfile::createForUser($newUser->getId());
 
-            if (!empty($validSchools)) {
-                $this->synchronizeSchoolUser($newUser->getId(), $validSchools);
+            if (!empty($validDepartments)) {
+                $this->synchronizeDepartmentUser($newUser->getId(), $validDepartments);
             }
 
-        } catch (\InvalidArgumentException $invalidArgumentException) {
-            Message::error($invalidArgumentException->getMessage());
+        } catch (\InvalidArgumentException $e) {
+            Message::error($e->getMessage());
             redirect("/admin/usuarios/cadastrar");
             return;
         }
@@ -112,7 +104,6 @@ class UserController extends Controller
         Auth::requirePermission(Permission::EDIT_USER);
 
         $user = User::find((int)$data["id"]);
-
         if (!$user) {
             Message::warning("Usuário não encontrado ou não existe.");
             redirect("/admin/usuarios");
@@ -122,21 +113,18 @@ class UserController extends Controller
         echo $this->view->render("admin/user/edit", [
             "user" => $user,
             "roles" => Role::all(),
-            "schools" => School::all(),
-            "userSchools" => $user->schoolUserLinks(),
+            "departments" => Department::all(),
+            "userDepartments" => UserDepartment::linksByUser($user->getId()),
         ]);
-
         clear_old();
     }
 
     public function update(?array $data): void
     {
         Auth::requirePermission(Permission::EDIT_USER);
-
         $this->validateCsrfToken($data, "/admin/usuarios/editar/" . $data["id"]);
 
         $user = User::find((int)$data["id"]);
-
         if (!$user) {
             Message::warning("Usuário não encontrado ou não existe.");
             redirect("/admin/usuarios");
@@ -166,16 +154,15 @@ class UserController extends Controller
                 $user->validateBusinessRule($user->getId())
             );
 
-            $validSchools = [];
-
-            foreach ($data["schools"] ?? [] as $school) {
-                if (!empty($school["school_id"])) {
-                    $validSchools[] = $school;
+            $validDepartments = [];
+            foreach ($data["departments"] ?? [] as $dept) {
+                if (!empty($dept["department_id"])) {
+                    $validDepartments[] = $dept;
                 }
             }
 
-            if (!empty($validSchools)) {
-                $linkErrors = SchoolUser::validateSchoolUserLinks($validSchools);
+            if (!empty($validDepartments)) {
+                $linkErrors = UserDepartment::validateDepartmentLinks($validDepartments);
                 $errors = array_merge($errors, $linkErrors);
             }
 
@@ -189,15 +176,14 @@ class UserController extends Controller
             }
 
             $user->save();
+            $this->removeDepartmentUserLinks($user->getId());
 
-            $this->removeSchoolUserLinks($user->getId());
-
-            if (!empty($validSchools)) {
-                $this->synchronizeSchoolUser($user->getId(), $validSchools);
+            if (!empty($validDepartments)) {
+                $this->synchronizeDepartmentUser($user->getId(), $validDepartments);
             }
 
-        } catch (\InvalidArgumentException $invalidArgumentException) {
-            Message::error($invalidArgumentException->getMessage());
+        } catch (\InvalidArgumentException $e) {
+            Message::error($e->getMessage());
             redirect("/admin/usuarios/editar/" . $user->getId());
             return;
         }
@@ -209,11 +195,9 @@ class UserController extends Controller
     public function destroy(?array $data): void
     {
         Auth::requirePermission(Permission::DELETE_USER);
-
         $this->validateCsrfToken($data, "/admin/usuarios");
 
         $user = User::find((int)$data["id"]);
-
         if (!$user) {
             Message::error("Usuário não encontrado ou não existe.");
             redirect("/admin/usuarios");
@@ -226,8 +210,8 @@ class UserController extends Controller
             return;
         }
 
-        if ($user->existsSchoolLinks()) {
-            Message::warning("Este usuário possui vínculos com escolas e não pode ser excluído.");
+        if ($user->existsDepartmentLinks()) {
+            Message::warning("Este usuário possui vínculos com departamentos e não pode ser excluído.");
             redirect("/admin/usuarios");
             return;
         }
@@ -240,8 +224,8 @@ class UserController extends Controller
 
         try {
             $user->delete();
-        } catch (\InvalidArgumentException $invalidArgumentException) {
-            Message::error($invalidArgumentException->getMessage());
+        } catch (\InvalidArgumentException $e) {
+            Message::error($e->getMessage());
             redirect("/admin/usuarios");
             return;
         }
@@ -250,22 +234,21 @@ class UserController extends Controller
         redirect("/admin/usuarios");
     }
 
-    private function synchronizeSchoolUser(int $userId, array $links): void
+    private function synchronizeDepartmentUser(int $userId, array $links): void
     {
-        foreach (SchoolUser::validateSchools($links) as $school) {
-            $newSchoolUser = new SchoolUser();
-            $newSchoolUser->fill([
-                "school_id" => $school["school_id"],
+        foreach (UserDepartment::validateDepartments($links) as $dept) {
+            $newLink = new UserDepartment();
+            $newLink->fill([
+                "department_id" => $dept["department_id"],
                 "user_id" => $userId,
-                "shift" => $school["shift"],
             ]);
-            $newSchoolUser->save();
+            $newLink->save();
         }
     }
 
-    private function removeSchoolUserLinks(int $userId): void
+    private function removeDepartmentUserLinks(int $userId): void
     {
-        foreach (SchoolUser::linksByUser($userId) ?? [] as $link) {
+        foreach (UserDepartment::linksByUser($userId) as $link) {
             $link->delete();
         }
     }
