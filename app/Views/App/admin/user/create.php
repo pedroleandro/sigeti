@@ -157,9 +157,9 @@
                                                     <select name="departments[0][department_id]" class="form-select">
                                                         <option disabled value="" selected>Selecione o departamento</option>
                                                         <?php if (!empty($departments)): ?>
-                                                            <?php foreach ($departments as $school): ?>
-                                                                <option value="<?= $school->getId() ?>">
-                                                                    <?= htmlspecialchars($school->getName()) ?>
+                                                            <?php foreach ($departments as $department): ?>
+                                                                <option value="<?= $department->getId() ?>">
+                                                                    <?= htmlspecialchars($department->getName()) ?>
                                                                 </option>
                                                             <?php endforeach; ?>
                                                         <?php else: ?>
@@ -217,7 +217,7 @@
     const departmentLinks = document.getElementById('departmentLinks');
     const departmentLinksList = document.getElementById('departmentLinksList');
     let rowIndex = 1;
-    const departmentOptions = `<?php foreach ($departments as $school): ?><option value="<?= $school->getId() ?>"><?= htmlspecialchars($school->getName()) ?></option><?php endforeach; ?>`;
+    const departmentOptions = `<?php foreach ($departments as $department): ?><option value="<?= $department->getId() ?>"><?= htmlspecialchars($department->getName()) ?></option><?php endforeach; ?>`;
 
     const hideFor = ['Administrador'];
 
