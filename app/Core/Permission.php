@@ -70,12 +70,6 @@ final class Permission
     public const EDIT_CATEGORY = 'editar_categoria';
     public const DELETE_CATEGORY = 'excluir_categoria';
 
-    // Schools
-    public const VIEW_SCHOOLS = 'ver_escolas';
-    public const CREATE_SCHOOL = 'criar_escola';
-    public const EDIT_SCHOOL = 'editar_escola';
-    public const DELETE_SCHOOL = 'excluir_escola';
-
     // Own profile
     public const EDIT_OWN_PROFILE = 'editar_proprio_perfil';
     public const CHANGE_OWN_PASSWORD = 'alterar_propria_senha';
