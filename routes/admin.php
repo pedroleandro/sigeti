@@ -40,11 +40,3 @@ $router->post("/categorias/cadastrar", "Admin\\CategoryController@store");
 $router->get("/categorias/editar/{id}", "Admin\\CategoryController@edit");
 $router->put("/categorias/editar/{id}", "Admin\\CategoryController@update");
 $router->delete("/categorias/excluir/{id}", "Admin\\CategoryController@destroy");
-
-/** Rotas de Escolas */
-$router->get("/escolas", "Admin\\SchoolController@index");
-$router->get("/escolas/cadastrar", "Admin\\SchoolController@create");
-$router->post("/escolas/cadastrar", "Admin\\SchoolController@store");
-$router->get("/escolas/editar/{id}", "Admin\\SchoolController@edit");
-$router->put("/escolas/editar/{id}", "Admin\\SchoolController@update");
-$router->delete("/escolas/excluir/{id}", "Admin\\SchoolController@destroy");
