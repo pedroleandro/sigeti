@@ -120,21 +120,6 @@
 
                     <li class="sidebar-title">Configurações</li>
 
-                    <li class="sidebar-item has-sub <?= ($menuActive ?? '') === 'escolas' ? 'active' : '' ?>">
-                        <a href="" class="sidebar-link">
-                            <i class="bi bi-building"></i>
-                            <span>Escolas</span>
-                        </a>
-                        <ul class="submenu">
-                            <li class="submenu-item <?= ($menuActive ?? '') === 'escolas' && ($submenuActive ?? '') === 'nova' ? 'active' : '' ?>">
-                                <a href="<?= url('/admin/escolas/cadastrar') ?>" class="submenu-link">Nova</a>
-                            </li>
-                            <li class="submenu-item <?= ($menuActive ?? '') === 'escolas' && ($submenuActive ?? '') === 'todos' ? 'active' : '' ?>">
-                                <a href="<?= url('/admin/escolas') ?>" class="submenu-link">Todas</a>
-                            </li>
-                        </ul>
-                    </li>
-
                     <li class="sidebar-item has-sub <?= ($menuActive ?? '') === 'categorias' ? 'active' : '' ?>">
                         <a href="" class="sidebar-link">
                             <i class="bi bi-tag-fill"></i>
