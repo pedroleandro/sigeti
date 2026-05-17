@@ -138,17 +138,17 @@
                                     </div>
                                 </div>
 
-                                <div id="schoolLinks"
+                                <div id="departmentLinks"
                                      style="display: <?= in_array($user->role()?->getName(), ['Técnico', 'Administrador']) ? 'none' : 'block' ?>;">
                                     <hr>
                                     <h6 class="fw-bold mb-3">
                                         <i class="bi bi-building me-1"></i>
                                         Departamentos
                                     </h6>
-                                    <div id="schoolLinksList">
+                                    <div id="departmentLinksList">
                                         <?php if (!empty($userDepartments)): ?>
                                             <?php foreach ($userDepartments as $index => $link): ?>
-                                                <div class="school-link-row row mb-2">
+                                                <div class="department-link-row row mb-2">
                                                     <div class="col-12 col-md-7 mb-2 mb-md-0">
                                                         <div class="input-group">
                                                             <span class="input-group-text"><i
@@ -177,7 +177,7 @@
                                                 </div>
                                             <?php endforeach; ?>
                                         <?php else: ?>
-                                            <div class="school-link-row row mb-2">
+                                            <div class="department-link-row row mb-2">
                                                 <div class="col-12 col-md-7 mb-2 mb-md-0">
                                                     <div class="input-group">
                                                         <span class="input-group-text"><i
@@ -201,7 +201,7 @@
                                         <?php endif; ?>
                                     </div>
                                     <button type="button" class="btn btn-sm btn-outline-secondary mb-3"
-                                            id="addSchoolLink">
+                                            id="addDepartmentLink">
                                         <i class="bi bi-plus-circle me-1"></i>
                                         Adicionar outro departamento
                                     </button>
@@ -243,8 +243,8 @@
 
 <script>
     const roleSelect = document.getElementById('role_id');
-    const schoolLinks = document.getElementById('schoolLinks');
-    const schoolLinksList = document.getElementById('schoolLinksList');
+    const departmentLinks = document.getElementById('departmentLinks');
+    const departmentLinksList = document.getElementById('departmentLinksList');
     let rowIndex = <?= max(count($userdepartments ?? []), 1) ?>;
     const departmentOptions = `<?php foreach ($departments as $department): ?><option value="<?= $department->getId() ?>"><?= htmlspecialchars($department->getName()) ?></option><?php endforeach; ?>`;
 
@@ -252,7 +252,7 @@
 
     const initialRoleText = roleSelect.options[roleSelect.selectedIndex].text;
     if (hideFor.includes(initialRoleText)) {
-        schoolLinksList.querySelectorAll('select').forEach(function (select) {
+        departmentLinksList.querySelectorAll('select').forEach(function (select) {
             select.value = '';
         });
     }
@@ -260,12 +260,12 @@
     roleSelect.addEventListener('change', function () {
         const selectedText = this.options[this.selectedIndex].text;
         if (hideFor.includes(selectedText)) {
-            schoolLinks.style.display = 'none';
-            schoolLinksList.querySelectorAll('select').forEach(function (select) {
+            departmentLinks.style.display = 'none';
+            departmentLinksList.querySelectorAll('select').forEach(function (select) {
                 select.value = '';
             });
         } else {
-            schoolLinks.style.display = 'block';
+            departmentLinks.style.display = 'block';
         }
     });
 
@@ -283,9 +283,9 @@
         }
     });
 
-    document.getElementById('addSchoolLink').addEventListener('click', function () {
+    document.getElementById('addDepartmentLink').addEventListener('click', function () {
         const row = document.createElement('div');
-        row.className = 'school-link-row row mb-2';
+        row.className = 'department-link-row row mb-2';
         row.innerHTML = `
         <div class="col-12 col-md-7 mb-2 mb-md-0">
             <div class="input-group">
@@ -296,28 +296,17 @@
                 </select>
             </div>
         </div>
-        <div class="col-12 col-md-4 mb-2 mb-md-0">
-            <div class="input-group">
-                <span class="input-group-text"><i class="bi bi-clock-fill"></i></span>
-                <select name="departments[${rowIndex}][shift]" class="form-select">
-                    <option value="manha">Manhã</option>
-                    <option value="tarde">Tarde</option>
-                    <option value="integral">Integral</option>
-                    <option value="nao_aplicavel">Não aplicável</option>
-                </select>
-            </div>
-        </div>
         <div class="col-12 col-md-1 d-flex align-items-center mt-2 mt-md-0">
             <button type="button" class="btn btn-sm btn-danger remove-row">
                 <i class="bi bi-trash-fill"></i>
             </button>
         </div>`;
-        schoolLinksList.appendChild(row);
+        departmentLinksList.appendChild(row);
         rowIndex++;
         row.querySelector('.remove-row').addEventListener('click', () => row.remove());
     });
 
     document.querySelectorAll('.remove-row').forEach(btn => {
-        btn.addEventListener('click', () => btn.closest('.school-link-row').remove());
+        btn.addEventListener('click', () => btn.closest('.department-link-row').remove());
     });
 </script>
