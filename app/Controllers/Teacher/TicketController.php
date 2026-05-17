@@ -37,9 +37,9 @@ class TicketController extends Controller
         $departmentsUser = UserDepartment::linksByUser(Auth::user()->id);
         $departments = [];
 
-        /** @var UserDepartment $schoolUser */
-        foreach ($departmentsUser as $schoolUser) {
-            $departments[] = Department::find($schoolUser->getDepartmentId());
+        /** @var UserDepartment $departmentUser */
+        foreach ($departmentsUser as $departmentUser) {
+            $departments[] = Department::find($departmentUser->getDepartmentId());
         }
 
         echo $this->view->render("teacher/ticket/create", [
