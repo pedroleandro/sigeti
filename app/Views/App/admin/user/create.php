@@ -143,14 +143,14 @@
                                     </div>
                                 </div>
 
-                                <div id="schoolLinks" style="display: none;">
+                                <div id="departmentLinks" style="display: none;">
                                     <hr>
                                     <h6 class="fw-bold mb-3">
                                         <i class="bi bi-building me-1"></i>
                                         Departamento
                                     </h6>
-                                    <div id="schoolLinksList">
-                                        <div class="school-link-row row mb-2">
+                                    <div id="departmentLinksList">
+                                        <div class="department-link-row row mb-2">
                                             <div class="col-12 col-md-7 mb-2 mb-md-0">
                                                 <div class="input-group">
                                                     <span class="input-group-text"><i class="bi bi-building"></i></span>
@@ -172,9 +172,9 @@
                                         </div>
                                     </div>
                                     <button type="button" class="btn btn-sm btn-outline-secondary mb-3"
-                                            id="addSchoolLink">
+                                            id="addDepartmentLink">
                                         <i class="bi bi-plus-circle me-1"></i>
-                                        Adicionar outra departamento
+                                        Adicionar outro departamento
                                     </button>
                                 </div>
 
@@ -214,8 +214,8 @@
 
 <script>
     const roleSelect = document.getElementById('role_id');
-    const schoolLinks = document.getElementById('schoolLinks');
-    const schoolLinksList = document.getElementById('schoolLinksList');
+    const departmentLinks = document.getElementById('departmentLinks');
+    const departmentLinksList = document.getElementById('departmentLinksList');
     let rowIndex = 1;
     const departmentOptions = `<?php foreach ($departments as $school): ?><option value="<?= $school->getId() ?>"><?= htmlspecialchars($school->getName()) ?></option><?php endforeach; ?>`;
 
@@ -223,7 +223,7 @@
 
     const initialRoleText = roleSelect.options[roleSelect.selectedIndex].text;
     if (hideFor.includes(initialRoleText)) {
-        schoolLinksList.querySelectorAll('select').forEach(function (select) {
+        departmentLinksList.querySelectorAll('select').forEach(function (select) {
             select.value = '';
         });
     }
@@ -231,12 +231,12 @@
     roleSelect.addEventListener('change', function () {
         const selectedText = this.options[this.selectedIndex].text;
         if (hideFor.includes(selectedText)) {
-            schoolLinks.style.display = 'none';
-            schoolLinksList.querySelectorAll('select').forEach(function (select) {
+            departmentLinks.style.display = 'none';
+            departmentLinksList.querySelectorAll('select').forEach(function (select) {
                 select.value = '';
             });
         } else {
-            schoolLinks.style.display = 'block';
+            departmentLinks.style.display = 'block';
         }
     });
 
@@ -254,27 +254,16 @@
         }
     });
 
-    document.getElementById('addSchoolLink').addEventListener('click', function () {
+    document.getElementById('addDepartmentLink').addEventListener('click', function () {
         const row = document.createElement('div');
-        row.className = 'school-link-row row mb-2';
+        row.className = 'department-link-row row mb-2';
         row.innerHTML = `
         <div class="col-12 col-md-7 mb-2 mb-md-0">
             <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-building"></i></span>
                 <select name="departments[${rowIndex}][department_id]" class="form-select">
-                    <option value="">Selecione a departamento</option>
-                    ${schoolOptions}
-                </select>
-            </div>
-        </div>
-        <div class="col-12 col-md-4 mb-2 mb-md-0">
-            <div class="input-group">
-                <span class="input-group-text"><i class="bi bi-clock-fill"></i></span>
-                <select name="departments[${rowIndex}][shift]" class="form-select">
-                    <option value="manha">Manhã</option>
-                    <option value="tarde">Tarde</option>
-                    <option value="integral">Integral</option>
-                    <option value="nao_aplicavel">Não aplicável</option>
+                    <option value="">Selecione o departamento</option>
+                    ${departmentOptions}
                 </select>
             </div>
         </div>
@@ -283,7 +272,7 @@
                 <i class="bi bi-trash-fill"></i>
             </button>
         </div>`;
-        schoolLinksList.appendChild(row);
+        departmentLinksList.appendChild(row);
         rowIndex++;
         row.querySelector('.remove-row').addEventListener('click', () => row.remove());
     });
