@@ -68,7 +68,7 @@ class TicketController extends Controller
             $newTicket->fill([
                 "title" => $data["title"],
                 "description" => $data["description"],
-                "school_id" => $data["school_id"],
+                "department_id" => $data["department_id"],
                 "category_id" => $data["category_id"],
                 "opened_by" => $data["opened_by"],
                 "status" => $data["status"],
