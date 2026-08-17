@@ -15,14 +15,15 @@ RUN apt-get update && apt-get install -y \
 RUN a2enmod rewrite
 
 # Configura o Apache para permitir .htaccess na pasta do projeto
+# Configura o Apache para permitir .htaccess na pasta do projeto
 RUN echo '<Directory /var/www/html/sigeti>\n\
     AllowOverride All\n\
     Require all granted\n\
 </Directory>' > /etc/apache2/conf-available/sigeti.conf \
     && a2enconf sigeti
 
-# Instala o Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Aponta o DocumentRoot para a pasta do projeto
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/sigeti|' /etc/apache2/sites-available/000-default.conf
 
 WORKDIR /var/www/html/sigeti
 

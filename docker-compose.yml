@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: sigeti_app
     ports:
-      - "8080:80"
+      - "127.0.0.1:8005:80"
     volumes:
       - .:/var/www/html/sigeti
     depends_on:
@@ -17,7 +17,7 @@ services:
     image: mysql:8.0
     container_name: sigeti_db
     ports:
-      - "3305:3306"
+      - "127.0.0.1:3305:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: sigeti
